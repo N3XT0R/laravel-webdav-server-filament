@@ -52,7 +52,7 @@
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "lint": "pint",
-        "test": "pest",
+        "test": "vendor/bin/phpunit --no-coverage",
         "test:lint": "pint --test"
     },
     "extra": {
