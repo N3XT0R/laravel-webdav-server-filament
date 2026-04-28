@@ -96,4 +96,5 @@ exclude = [
   "**/lang/**",
   "**/config/**",
   "**/resources/**",
+  ".github/**"
 ]
