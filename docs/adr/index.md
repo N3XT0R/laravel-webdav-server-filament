@@ -12,6 +12,6 @@ The records follow the Nygard ADR structure recommended by `adr.github.io`:
 
 ## Index
 
-| ADR | Title | Status |
-|-----|-------|--------|
-| [0001](0001-test-architecture-and-layering.md) | Test Architecture And Layering | Accepted |
+| ADR                                            | Title                          | Status   |  
+|------------------------------------------------|--------------------------------|----------|
+| [0001](0001-test-architecture-and-layering.md) | Test Architecture And Layering | Accepted | 
