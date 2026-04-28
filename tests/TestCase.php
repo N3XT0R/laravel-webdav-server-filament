@@ -13,17 +13,18 @@ use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentServiceProvider;
+use Workbench\App\Models\User;
 
 class TestCase extends Orchestra
 {
-    use LazilyRefreshDatabase;
+
     use WithWorkbench;
 
     protected function setUp(): void
@@ -57,6 +58,13 @@ class TestCase extends Orchestra
         sort($providers);
 
         return $providers;
+    }
+
+    protected function defineEnvironment($app): void
+    {
+        parent::defineEnvironment($app);
+        $config = $app->make(Repository::class);
+        $config->set('webdav-server.auth.user_model', User::class);
     }
 
     public function getEnvironmentSetUp($app): void
