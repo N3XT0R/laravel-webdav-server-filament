@@ -2,38 +2,53 @@
 
 declare(strict_types=1);
 
-use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
-use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
+namespace N3XT0R\LaravelWebdavServerFilament\Tests\Feature;
+
 use Filament\Forms\Components\Select;
 use Filament\Panel;
+use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
+use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
+use N3XT0R\LaravelWebdavServerFilament\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-it('registers WebDavAccountResource in the panel by default', function (): void {
-    $panel = Mockery::mock(Panel::class);
-    $panel->shouldReceive('resources')
-        ->once()
-        ->with([WebDavAccountResource::class])
-        ->andReturnSelf();
+final class PluginConfigurationTest extends TestCase
+{
+    #[Test]
+    public function it_registers_webdav_account_resource_in_the_panel_by_default(): void
+    {
+        $panel = Panel::make()->id('test');
 
-    $plugin = LaravelWebdavServerFilamentPlugin::make();
-    $plugin->register($panel);
-});
+        LaravelWebdavServerFilamentPlugin::make()->register($panel);
 
-it('skips registering WebDavAccountResource when withoutAccountResource is called', function (): void {
-    $panel = Mockery::mock(Panel::class);
-    $panel->shouldReceive('resources')->never();
+        self::assertContains(WebDavAccountResource::class, $panel->getResources());
+    }
 
-    $plugin = LaravelWebdavServerFilamentPlugin::make()->withoutAccountResource();
-    $plugin->register($panel);
-});
+    #[Test]
+    public function it_skips_registering_webdav_account_resource_when_disabled(): void
+    {
+        $panel = Panel::make()->id('test');
 
-it('stores and retrieves the userSelectUsing callback', function (): void {
-    $callback = fn (Select $select) => $select->label('Custom User');
-    $plugin = LaravelWebdavServerFilamentPlugin::make()->userSelectUsing($callback);
+        LaravelWebdavServerFilamentPlugin::make()
+            ->withoutAccountResource()
+            ->register($panel);
 
-    expect($plugin->getUserSelectCallback())->toBe($callback);
-});
+        self::assertNotContains(WebDavAccountResource::class, $panel->getResources());
+    }
 
-it('returns null for userSelectCallback when not configured', function (): void {
-    $plugin = LaravelWebdavServerFilamentPlugin::make();
-    expect($plugin->getUserSelectCallback())->toBeNull();
-});
+    #[Test]
+    public function it_stores_and_retrieves_the_user_select_callback(): void
+    {
+        $callback = fn (Select $select): Select => $select->label('Custom User');
+
+        $plugin = LaravelWebdavServerFilamentPlugin::make()
+            ->userSelectUsing($callback);
+
+        self::assertSame($callback, $plugin->getUserSelectCallback());
+    }
+
+    #[Test]
+    public function it_returns_null_for_user_select_callback_when_not_configured(): void
+    {
+        self::assertNull(LaravelWebdavServerFilamentPlugin::make()->getUserSelectCallback());
+    }
+}

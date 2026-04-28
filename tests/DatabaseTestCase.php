@@ -37,6 +37,6 @@ class DatabaseTestCase extends TestCase
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../vendor/n3xt0r/laravel-webdav-server/database/migrations');
     }
 }

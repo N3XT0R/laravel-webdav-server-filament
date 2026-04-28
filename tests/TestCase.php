@@ -15,6 +15,7 @@ use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Livewire\LivewireServiceProvider;
 use N3XT0R\LaravelWebdavServer\WebdavServerServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
@@ -32,7 +33,9 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'N3XT0R\\LaravelWebdavServerFilament\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => Str::startsWith($modelName, 'Workbench\\App\\')
+                ? 'Workbench\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+                : 'N3XT0R\\LaravelWebdavServerFilament\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
