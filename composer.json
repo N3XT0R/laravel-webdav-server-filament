@@ -7,7 +7,16 @@
         "filamentphp",
         "filament",
         "filament-plugin",
-        "laravel-webdav-server-filament"
+        "laravel-webdav-server-filament",
+        "webdav",
+        "webdav-server",
+        "sabre",
+        "sabredav",
+        "admin",
+        "admin-panel",
+        "account-management",
+        "storage",
+        "file-management"
     ],
     "homepage": "https://github.com/n3xt0r/laravel-webdav-server-filament",
     "support": {
