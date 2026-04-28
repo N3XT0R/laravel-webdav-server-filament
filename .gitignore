@@ -9,5 +9,6 @@ composer.lock
 node_modules
 phpstan.neon
 vendor
+workbench/storage
 /.claude
 CLAUDE.md
