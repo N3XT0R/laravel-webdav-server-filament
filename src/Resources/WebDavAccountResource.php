@@ -63,7 +63,7 @@ final class WebDavAccountResource extends Resource
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password'))
                 ->password()
                 ->revealable()
-                ->required(fn(string $operation): bool => $operation === 'create')
+                ->required(fn (string $operation): bool => $operation === 'create')
                 ->suffixAction(
                     Action::make('generatePassword')
                         ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.generate_password'))
@@ -80,7 +80,7 @@ final class WebDavAccountResource extends Resource
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password_confirmation'))
                 ->password()
                 ->revealable()
-                ->required(fn(string $operation): bool => $operation === 'create')
+                ->required(fn (string $operation): bool => $operation === 'create')
                 ->same('password'),
 
             static::buildUserSelect(),
@@ -119,7 +119,7 @@ final class WebDavAccountResource extends Resource
 
                 TextColumn::make('user.name')
                     ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.user'))
-                    ->description(fn(Model $record): string => $record->user?->email ?? '')
+                    ->description(fn (Model $record): string => $record->user?->email ?? '')
                     ->searchable()
                     ->sortable(),
 
@@ -149,12 +149,12 @@ final class WebDavAccountResource extends Resource
                     BulkAction::make('enable')
                         ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.enable_selected'))
                         ->icon(Heroicon::OutlinedCheckCircle)
-                        ->action(fn(Collection $records) => $records->each->update(['enabled' => true])),
+                        ->action(fn (Collection $records) => $records->each->update(['enabled' => true])),
 
                     BulkAction::make('disable')
                         ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.disable_selected'))
                         ->icon(Heroicon::OutlinedXCircle)
-                        ->action(fn(Collection $records) => $records->each->update(['enabled' => false])),
+                        ->action(fn (Collection $records) => $records->each->update(['enabled' => false])),
 
                     DeleteBulkAction::make(),
                 ]),
@@ -226,12 +226,12 @@ final class WebDavAccountResource extends Resource
 
         return $select
             ->searchable()
-            ->getSearchResultsUsing(fn(string $search): array => $userModel::query()
+            ->getSearchResultsUsing(fn (string $search): array => $userModel::query()
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->limit(50)
                 ->pluck('name', 'id')
                 ->toArray())
-            ->getOptionLabelUsing(fn(mixed $value): string => $userModel::find($value)?->name ?? (string)$value);
+            ->getOptionLabelUsing(fn (mixed $value): string => $userModel::find($value)?->name ?? (string)$value);
     }
 }
