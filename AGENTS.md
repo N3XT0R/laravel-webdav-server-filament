@@ -113,6 +113,62 @@ the accepted ADRs before writing or reviewing code.
 | [0006](docs/adr/0006-changelog-maintenance-and-unreleased-entry-policy.md)    | Maintain `CHANGELOG.md` under `[Unreleased]` as part of each change                |
 | [0007](docs/adr/0007-conventional-commits.md)                                 | Commit messages must follow Conventional Commits v1.0.0                            |
 
+## Efficiency Guidelines
+
+### Test execution
+
+Do not run the full test suite after every change. Running all tests is slow and expensive.
+
+Prefer targeted execution:
+
+```bash
+# Run only the file you changed or added
+docker compose exec php vendor/bin/phpunit tests/Feature/MyTest.php
+
+# Run only tests matching a name pattern
+docker compose exec php vendor/bin/phpunit --filter "it_does_something"
+
+# Run an entire suite (Feature or Integration) but not all suites
+docker compose exec php vendor/bin/phpunit --testsuite Feature
+```
+
+Run `composer test` (full suite) only when:
+- a refactor touches multiple unrelated areas, or
+- you are preparing to commit and want a final confidence check
+
+### Code style before tests
+
+Run `composer test:lint` before running tests. Style errors are caught instantly without booting
+the framework, saving time on test runs that would fail for a trivial formatting reason.
+
+```bash
+docker compose exec php composer test:lint   # fast, no framework boot
+docker compose exec php composer test        # only after lint passes
+```
+
+### Read before exploring
+
+Before reading a file in full, use search to locate the relevant class, method, or configuration
+key. Reading a 300-line file to find a 5-line method wastes context.
+
+- Use `grep -rn` to find where a symbol is defined or used
+- Use `git diff` to understand what actually changed before re-reading files
+- Read only the relevant section of a file when the location is already known
+
+### Avoid redundant installs
+
+Do not run `composer install` unless `composer.json` has changed or the `vendor/` directory is
+absent or incomplete. Check first:
+
+```bash
+ls /home/user/projects/laravel-webdav-server-filament/vendor | head -5
+```
+
+### Avoid re-reading unchanged files
+
+If a file was read earlier in the session and no tool has written to it since, trust the earlier
+content. Re-reading it unconditionally wastes context budget.
+
 ## Third-Party Package Documentation
 
 Do not guess how a third-party package works. When working with any external dependency, consult
