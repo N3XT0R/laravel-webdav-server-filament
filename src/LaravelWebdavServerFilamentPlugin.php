@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace N3XT0R\LaravelWebdavServerFilament;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class LaravelWebdavServerFilamentPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'laravel-webdav-server-filament';
     }
 
     public function register(Panel $panel): void

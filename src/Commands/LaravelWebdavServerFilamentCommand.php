@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace N3XT0R\LaravelWebdavServerFilament\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelWebdavServerFilamentCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-webdav-server-filament';
 
     public $description = 'My command';
 

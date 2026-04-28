@@ -1,36 +1,33 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "n3xt0r/laravel-webdav-server-filament",
+    "description": "Filament admin panel integration for the Laravel WebDAV Server package.",
     "keywords": [
-        ":vendor_name",
+        "N3XT0R",
         "laravel",
         "filamentphp",
         "filament",
         "filament-plugin",
-        ":package_slug"
+        "laravel-webdav-server-filament"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/n3xt0r/laravel-webdav-server-filament",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/n3xt0r/laravel-webdav-server-filament/issues",
+        "source": "https://github.com/n3xt0r/laravel-webdav-server-filament"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Ilya Beliaev",
+            "email": "info@php-dev.info",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.2",
         "filament/filament": "^5.0",
-        "filament/forms": "^5.0",
-        "filament/tables": "^5.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
-        "larastan/larastan": "^3.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^8.0",
         "orchestra/testbench": "^9.0|^10.0",
@@ -38,36 +35,32 @@
         "pestphp/pest-plugin-arch": "^3.0|^4.0",
         "pestphp/pest-plugin-laravel": "^3.0|^4.0",
         "pestphp/pest-plugin-livewire": "^3.0|^4.0",
-        "rector/rector": "^2.0",
         "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "N3XT0R\\LaravelWebdavServerFilament\\": "src/",
+            "N3XT0R\\LaravelWebdavServerFilament\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "N3XT0R\\LaravelWebdavServerFilament\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-        "analyse": "phpstan analyse",
         "lint": "pint",
-        "refactor": "rector",
         "test": "pest",
-        "test:lint": "pint --test",
-        "test:refactor": "rector --dry-run"
+        "test:lint": "pint --test"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "N3XT0R\\LaravelWebdavServerFilament\\LaravelWebdavServerFilamentServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelWebdavServerFilament": "N3XT0R\\LaravelWebdavServerFilament\\Facades\\LaravelWebdavServerFilament"
             }
         }
     },
