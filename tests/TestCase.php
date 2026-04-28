@@ -16,6 +16,7 @@ use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
+use N3XT0R\LaravelWebdavServer\WebdavServerServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
@@ -52,6 +53,7 @@ class TestCase extends Orchestra
             SupportServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
+            WebdavServerServiceProvider::class,
             LaravelWebdavServerFilamentServiceProvider::class,
         ];
 
