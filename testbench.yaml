@@ -10,7 +10,7 @@ seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
 
 workbench:
-  start: '/'
+  start: '/admin/'
   install: true
   health: false
   discovers:
