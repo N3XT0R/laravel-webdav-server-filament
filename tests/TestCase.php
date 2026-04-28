@@ -25,7 +25,6 @@ use Workbench\App\Models\User;
 
 class TestCase extends Orchestra
 {
-
     use WithWorkbench;
 
     protected function setUp(): void

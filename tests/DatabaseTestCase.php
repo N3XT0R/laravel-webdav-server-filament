@@ -10,7 +10,6 @@ use Workbench\App\Models\User;
 
 class DatabaseTestCase extends TestCase
 {
-
     use LazilyRefreshDatabase;
 
     public function getEnvironmentSetUp($app): void
