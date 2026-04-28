@@ -49,24 +49,24 @@ final class WebDavAccountResource extends Resource
     {
         return $schema->schema([
             TextInput::make('username')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.username'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.username'))
                 ->required()
                 ->maxLength(255)
                 ->unique(table: 'webdav_accounts', column: 'username', ignoreRecord: true),
 
             TextInput::make('display_name')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.display_name'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.display_name'))
                 ->maxLength(255)
-                ->placeholder(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.placeholders.display_name')),
+                ->placeholder(__('webdav-server-filament::webdav-server-filament.resources.accounts.placeholders.display_name')),
 
             TextInput::make('password')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.password'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password'))
                 ->password()
                 ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
+                ->required(fn(string $operation): bool => $operation === 'create')
                 ->suffixAction(
                     Action::make('generatePassword')
-                        ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.actions.generate_password'))
+                        ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.generate_password'))
                         ->icon(Heroicon::OutlinedKey)
                         ->action(function (Set $set): void {
                             $password = Str::password(16);
@@ -77,22 +77,22 @@ final class WebDavAccountResource extends Resource
                 ),
 
             TextInput::make('password_confirmation')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.password_confirmation'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password_confirmation'))
                 ->password()
                 ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
+                ->required(fn(string $operation): bool => $operation === 'create')
                 ->same('password'),
 
             static::buildUserSelect(),
 
             Toggle::make('enabled')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.enabled'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.enabled'))
                 ->default(true),
 
             KeyValue::make('meta')
-                ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.meta'))
-                ->keyLabel(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.meta_key'))
-                ->valueLabel(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.meta_value'))
+                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta'))
+                ->keyLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_key'))
+                ->valueLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_value'))
                 ->reorderable(),
         ]);
     }
@@ -108,35 +108,35 @@ final class WebDavAccountResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('username')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.username'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.username'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('display_name')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.display_name'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.display_name'))
                     ->searchable()
-                    ->placeholder(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.empty.display_name')),
+                    ->placeholder(__('webdav-server-filament::webdav-server-filament.resources.accounts.empty.display_name')),
 
                 TextColumn::make('user.name')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.user'))
-                    ->description(fn (Model $record): string => $record->user?->email ?? '')
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.user'))
+                    ->description(fn(Model $record): string => $record->user?->email ?? '')
                     ->searchable()
                     ->sortable(),
 
                 IconColumn::make('enabled')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.enabled'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.enabled'))
                     ->boolean(),
 
                 TextColumn::make('created_at')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.created_at'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.created_at'))
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
                 TernaryFilter::make('enabled')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.filters.status'))
-                    ->trueLabel(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.filters.active'))
-                    ->falseLabel(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.filters.inactive')),
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.filters.status'))
+                    ->trueLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.filters.active'))
+                    ->falseLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.filters.inactive')),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -147,14 +147,14 @@ final class WebDavAccountResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('enable')
-                        ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.actions.enable_selected'))
+                        ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.enable_selected'))
                         ->icon(Heroicon::OutlinedCheckCircle)
-                        ->action(fn (Collection $records) => $records->each->update(['enabled' => true])),
+                        ->action(fn(Collection $records) => $records->each->update(['enabled' => true])),
 
                     BulkAction::make('disable')
-                        ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.actions.disable_selected'))
+                        ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.disable_selected'))
                         ->icon(Heroicon::OutlinedXCircle)
-                        ->action(fn (Collection $records) => $records->each->update(['enabled' => false])),
+                        ->action(fn(Collection $records) => $records->each->update(['enabled' => false])),
 
                     DeleteBulkAction::make(),
                 ]),
@@ -168,7 +168,7 @@ final class WebDavAccountResource extends Resource
      */
     public static function getModelLabel(): string
     {
-        return __('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.labels.singular');
+        return __('webdav-server-filament::webdav-server-filament.resources.accounts.labels.singular');
     }
 
     /**
@@ -178,7 +178,7 @@ final class WebDavAccountResource extends Resource
      */
     public static function getPluralModelLabel(): string
     {
-        return __('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.labels.plural');
+        return __('webdav-server-filament::webdav-server-filament.resources.accounts.labels.plural');
     }
 
     /**
@@ -188,7 +188,7 @@ final class WebDavAccountResource extends Resource
      */
     public static function getNavigationLabel(): string
     {
-        return __('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.navigation.label');
+        return __('webdav-server-filament::webdav-server-filament.resources.accounts.navigation.label');
     }
 
     /**
@@ -209,7 +209,7 @@ final class WebDavAccountResource extends Resource
     private static function buildUserSelect(): Select
     {
         $select = Select::make('user_id')
-            ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.user'))
+            ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.user'))
             ->required();
 
         try {
@@ -226,12 +226,12 @@ final class WebDavAccountResource extends Resource
 
         return $select
             ->searchable()
-            ->getSearchResultsUsing(fn (string $search): array => $userModel::query()
+            ->getSearchResultsUsing(fn(string $search): array => $userModel::query()
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->limit(50)
                 ->pluck('name', 'id')
                 ->toArray())
-            ->getOptionLabelUsing(fn (mixed $value): string => $userModel::find($value)?->name ?? (string) $value);
+            ->getOptionLabelUsing(fn(mixed $value): string => $userModel::find($value)?->name ?? (string)$value);
     }
 }
