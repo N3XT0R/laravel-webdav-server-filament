@@ -9,3 +9,5 @@ composer.lock
 node_modules
 phpstan.neon
 vendor
+.claude
+CLAUDE.md
