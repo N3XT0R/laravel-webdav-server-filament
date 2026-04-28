@@ -32,7 +32,7 @@
         }
     ],
     "suggest": {
-        "mmes-design/filament-file-manager": "Browse and manage WebDAV storage disks directly in the Filament admin panel."
+        "mmes-design/filament-file-manager": "Free file manager plugin for Filament — browse, upload, and manage files on WebDAV storage disks directly from the admin panel."
     },
     "require": {
         "php": "^8.4",
