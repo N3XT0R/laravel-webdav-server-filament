@@ -1,87 +1,145 @@
-# Filament admin panel integration for the Laravel WebDAV Server package.
+# Laravel WebDAV Server – Filament Integration
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/n3xt0r/laravel-webdav-server-filament.svg?style=flat-square)](https://packagist.org/packages/n3xt0r/laravel-webdav-server-filament)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/n3xt0r/laravel-webdav-server-filament.svg?style=flat-square)](https://packagist.org/packages/n3xt0r/laravel-webdav-server-filament)
 
+Official Filament admin panel for [`laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server).
 
+Manage WebDAV accounts, storage access, and configuration through a structured UI.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+---
+
+## Overview
+
+This package provides a Filament-based admin interface for the Laravel WebDAV Server.
+
+It allows you to manage WebDAV-related configuration and entities without interacting directly with the database or configuration files.
+
+The integration is designed to work on top of the stable extension points of the core package.
+
+---
+
+## Requirements
+
+- PHP 8.4+
+- Laravel 12+
+- Filament 5+
+- [`n3xt0r/laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server)
+
+---
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require n3xt0r/laravel-webdav-server-filament
 ```
 
-> [!IMPORTANT]
-> If you have not set up a custom theme and are using Filament Panels follow the instructions in the [Filament Docs](https://filamentphp.com/docs/4.x/styling/overview#creating-a-custom-theme) first.
-
-After setting up a custom theme add the plugin's views to your theme css file or your app's css file if using the standalone packages.
-
-```css
-@source '../../../../vendor/n3xt0r/laravel-webdav-server-filament/resources/**/*.blade.php';
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-webdav-server-filament-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
+If needed, publish configuration:
 
 ```bash
 php artisan vendor:publish --tag="laravel-webdav-server-filament-config"
 ```
 
-Optionally, you can publish the views using
+---
 
-```bash
-php artisan vendor:publish --tag="laravel-webdav-server-filament-views"
+## Features
+
+- Manage WebDAV accounts (create, update, disable)
+- Inspect account configuration used for authentication
+- Display WebDAV endpoint URLs per account
+- Quick access to connection details (username / endpoint)
+- Integration with existing storage and authorization configuration
+- Designed to work with the package's account model (`webdav-server.auth.account_model`)
+
+---
+
+## Available Resources
+
+### WebDAV Accounts
+
+A Filament resource for managing WebDAV accounts:
+
+- create and update accounts
+- activate / deactivate accounts
+- view account identifiers used during authentication
+- inspect related storage access
+
+---
+
+## Example Usage
+
+After installation, navigate to your Filament panel.
+
+A new section for WebDAV management will be available.
+
+Typical workflow:
+
+1. Create a new WebDAV account
+2. Assign or verify storage configuration
+3. Use the displayed endpoint:
+
+```text
+https://your-domain.test/webdav/default/
 ```
 
-This is the contents of the published config file:
+4. Connect using a WebDAV client (e.g. WinSCP, Finder, Windows Explorer)
 
-```php
-return [
-];
-```
+---
 
-## Usage
+## Integration Details
 
-```php
-$laravelWebdavServerFilament = new N3XT0R\LaravelWebdavServerFilament();
-echo $laravelWebdavServerFilament->echoPhrase('Hello, N3XT0R!');
-```
+This package does not replace any core functionality.
 
-## Testing
+It builds on top of:
 
-```bash
-composer test
-```
+- `AccountRepositoryInterface`
+- `CredentialValidatorInterface`
+- `PathAuthorizationInterface`
 
-## Changelog
+All behavior remains configurable through the core package.
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+---
 
-## Contributing
+## Customization
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+You can extend or override Filament resources as needed:
 
-## Security Vulnerabilities
+- extend the provided Resource classes
+- customize forms, tables, and actions
+- integrate with your existing Filament panels
 
-Please review [our security policy](.github/SECURITY.md) on how to report security vulnerabilities.
+---
 
-## Credits
+## Relationship to Core Package
 
-- [Ilya Beliaev](https://github.com/N3XT0R)
-- [All Contributors](../../contributors)
+This package is a companion to:
+
+👉 https://github.com/N3XT0R/laravel-webdav-server
+
+The core package provides:
+
+- WebDAV server runtime
+- request pipeline
+- storage resolution
+- authentication and authorization
+
+This package provides:
+
+- administrative UI
+- account management
+- operational visibility
+
+---
+
+## Documentation
+
+For full WebDAV server documentation, see:
+
+👉 https://laravel-webdav-server.readthedocs.io/en/latest/
+
+---
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+MIT License
