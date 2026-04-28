@@ -58,7 +58,9 @@ class LaravelWebdavServerFilamentServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+    }
 
     public function packageBooted(): void
     {
@@ -86,7 +88,7 @@ class LaravelWebdavServerFilamentServiceProvider extends PackageServiceProvider
         }
 
         // Testing
-        Testable::mixin(new TestsLaravelWebdavServerFilament);
+        Testable::mixin(new TestsLaravelWebdavServerFilament());
     }
 
     protected function getAssetPackageName(): ?string
