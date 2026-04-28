@@ -1,8 +1,8 @@
 # Laravel WebDAV Server – Filament Integration
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/n3xt0r/laravel-webdav-server-filament.svg?style=flat-square)](https://packagist.org/packages/n3xt0r/laravel-webdav-server-filament)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/run-tests.yml?branch=5.x&label=tests&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/n3xt0r/laravel-webdav-server-filament/php-code-style.yml?branch=5.x&label=code%20style&style=flat-square)](https://github.com/n3xt0r/laravel-webdav-server-filament/actions?query=workflow%3A"PHP+code+styling"+branch%3A5.x)
 
 Official Filament admin panel for [`laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server).
 
@@ -14,7 +14,8 @@ Manage WebDAV accounts, storage access, and configuration through a structured U
 
 This package provides a Filament-based admin interface for the Laravel WebDAV Server.
 
-It allows you to manage WebDAV-related configuration and entities without interacting directly with the database or configuration files.
+It allows you to manage WebDAV-related configuration and entities without interacting directly with the database or
+configuration files.
 
 The integration is designed to work on top of the stable extension points of the core package.
 
