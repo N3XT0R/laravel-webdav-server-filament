@@ -14,3 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added reusable password reset actions and bulk enable/disable controls for WebDAV account records.
   - Added plugin configuration for disabling the account resource and customizing the linked user select field.
   - Added translation-backed labels and messages for the WebDAV account management UI.
+
+- **localization**
+  - Added German translations for the WebDAV account management UI.
