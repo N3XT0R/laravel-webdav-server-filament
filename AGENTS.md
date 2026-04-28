@@ -62,14 +62,14 @@ npm run dev     # compile JS in watch mode
 
 ### Plugin Entry Points
 
-| File | Role |
-|------|------|
-| `src/LaravelWebdavServerFilamentPlugin.php` | Implements `Filament\Contracts\Plugin` — registered per-panel via `->plugin(LaravelWebdavServerFilamentPlugin::make())` |
-| `src/LaravelWebdavServerFilamentServiceProvider.php` | Extends `Spatie\LaravelPackageTools\PackageServiceProvider`; boots Filament asset/icon registration and stubs publishing |
-| `src/LaravelWebdavServerFilament.php` | Main class, currently a stub |
-| `src/Facades/LaravelWebdavServerFilament.php` | Laravel facade pointing to the main class |
-| `src/Commands/LaravelWebdavServerFilamentCommand.php` | Artisan command stub (`laravel-webdav-server-filament`) |
-| `src/Testing/TestsLaravelWebdavServerFilament.php` | Mixed into Livewire's `Testable` for custom test helpers |
+| File                                                  | Role                                                                                                                     |
+|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `src/LaravelWebdavServerFilamentPlugin.php`           | Implements `Filament\Contracts\Plugin` — registered per-panel via `->plugin(LaravelWebdavServerFilamentPlugin::make())`  |
+| `src/LaravelWebdavServerFilamentServiceProvider.php`  | Extends `Spatie\LaravelPackageTools\PackageServiceProvider`; boots Filament asset/icon registration and stubs publishing |
+| `src/LaravelWebdavServerFilament.php`                 | Main class, currently a stub                                                                                             |
+| `src/Facades/LaravelWebdavServerFilament.php`         | Laravel facade pointing to the main class                                                                                |
+| `src/Commands/LaravelWebdavServerFilamentCommand.php` | Artisan command stub (`laravel-webdav-server-filament`)                                                                  |
+| `src/Testing/TestsLaravelWebdavServerFilament.php`    | Mixed into Livewire's `Testable` for custom test helpers                                                                 |
 
 ### Workbench
 
@@ -81,6 +81,7 @@ never as PHPUnit mocks or abstract fixtures.
 ### Service Provider Pattern
 
 The service provider uses `spatie/laravel-package-tools`. Key boot behaviour:
+
 - Registers Filament assets via `FilamentAsset::register()` (JS/CSS/Alpine components —
   currently commented out until assets are built)
 - Registers icons via `FilamentIcon::register()`
@@ -102,15 +103,15 @@ The service provider uses `spatie/laravel-package-tools`. Key boot behaviour:
 Binding decisions for this project are documented in `docs/adr/`. All agents must read and follow
 the accepted ADRs before writing or reviewing code.
 
-| ADR | Topic |
-|-----|-------|
-| [0001](docs/adr/0001-test-architecture-and-layering.md) | Test layers — Feature, Integration, Unit; no mocks; workbench as test-support home |
-| [0002](docs/adr/0002-class-naming-convention-by-suffix.md) | Class naming by role suffix; no redundant namespace repetition in names |
-| [0003](docs/adr/0003-solid-compliance-and-design-patterns.md) | SOLID compliance; prefer established patterns over ad hoc structures |
-| [0004](docs/adr/0004-domain-specific-exception-hierarchies.md) | Domain exception hierarchies; no raw SPL exceptions for package failures |
-| [0005](docs/adr/0005-method-level-phpdoc-and-import-based-type-references.md) | PHPDoc on public methods; imported short names in docblocks |
-| [0006](docs/adr/0006-changelog-maintenance-and-unreleased-entry-policy.md) | Maintain `CHANGELOG.md` under `[Unreleased]` as part of each change |
-| [0007](docs/adr/0007-conventional-commits.md) | Commit messages must follow Conventional Commits v1.0.0 |
+| ADR                                                                           | Topic                                                                              |
+|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| [0001](docs/adr/0001-test-architecture-and-layering.md)                       | Test layers — Feature, Integration, Unit; no mocks; workbench as test-support home |
+| [0002](docs/adr/0002-class-naming-convention-by-suffix.md)                    | Class naming by role suffix; no redundant namespace repetition in names            |
+| [0003](docs/adr/0003-solid-compliance-and-design-patterns.md)                 | SOLID compliance; prefer established patterns over ad hoc structures               |
+| [0004](docs/adr/0004-domain-specific-exception-hierarchies.md)                | Domain exception hierarchies; no raw SPL exceptions for package failures           |
+| [0005](docs/adr/0005-method-level-phpdoc-and-import-based-type-references.md) | PHPDoc on public methods; imported short names in docblocks                        |
+| [0006](docs/adr/0006-changelog-maintenance-and-unreleased-entry-policy.md)    | Maintain `CHANGELOG.md` under `[Unreleased]` as part of each change                |
+| [0007](docs/adr/0007-conventional-commits.md)                                 | Commit messages must follow Conventional Commits v1.0.0                            |
 
 ## Code Style
 
