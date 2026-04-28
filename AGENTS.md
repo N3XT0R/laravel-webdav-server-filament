@@ -113,6 +113,28 @@ the accepted ADRs before writing or reviewing code.
 | [0006](docs/adr/0006-changelog-maintenance-and-unreleased-entry-policy.md)    | Maintain `CHANGELOG.md` under `[Unreleased]` as part of each change                |
 | [0007](docs/adr/0007-conventional-commits.md)                                 | Commit messages must follow Conventional Commits v1.0.0                            |
 
+## Third-Party Package Documentation
+
+Do not guess how a third-party package works. When working with any external dependency, consult
+its official documentation before writing code. Reading the documentation is mandatory, not
+optional.
+
+Guessing at APIs, method signatures, configuration keys, or integration patterns produces code that
+fails at runtime and is harder to debug than if the documentation had been read first.
+
+### Documentation references for this project
+
+| Package | Documentation |
+|---------|---------------|
+| Filament 5 | https://filamentphp.com/docs/5.x/introduction/overview |
+| Laravel WebDAV Server | https://laravel-webdav-server.readthedocs.io/en/stable/ |
+| Laravel | https://laravel.com/docs/12.x |
+| SabreDAV | https://sabre.io/dav/introduction/ |
+| Orchestra Testbench | https://packages.tools/testbench/ |
+
+When documentation and source code disagree, prefer the source code — but note the discrepancy
+rather than silently picking one.
+
 ## Code Style
 
 Pint with PSR-12 preset + `"concat_space": {"spacing": "one"}`. `vendor/`, `workbench/`, and
