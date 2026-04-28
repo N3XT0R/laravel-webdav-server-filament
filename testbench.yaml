@@ -2,8 +2,10 @@ laravel: '@testbench'
 
 providers:
  - Workbench\App\Providers\WorkbenchServiceProvider
+ - N3XT0R\LaravelWebdavServer\WebdavServerServiceProvider
 
 migrations:
+  - vendor/n3xt0r/laravel-webdav-server/database/migrations
   - workbench/database/migrations
 
 seeders:
