@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace N3XT0R\LaravelWebdavServerFilament\Tests\Feature\Resources;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use N3XT0R\LaravelWebdavServer\Facades\WebDavPath;
 use N3XT0R\LaravelWebdavServerFilament\Filament\Forms\Components\WebDavUrlInput;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountCreatedEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountUpdatedEvent;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountCreatedNotification;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\CreateWebDavAccount;
@@ -149,14 +154,39 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     #[Test]
     public function it_can_delete_an_account_from_the_table(): void
     {
+        Event::fake([WebDavAccountDeletedEvent::class, WebDavAccountEvent::class]);
         $user = User::factory()->create();
         $this->actingAs($user);
         $account = $this->createAccount($user, ['username' => 'to-delete']);
+        $accountKey = $account->getKey();
 
         Livewire::test(ListWebDavAccounts::class)
             ->callTableAction('delete', $account);
 
         $this->assertModelMissing($account);
+        $this->assertWebDavAccountEventDispatched(
+            WebDavAccountDeletedEvent::class,
+            WebDavAccountDeletedEvent::ACTION,
+            $accountKey,
+        );
+    }
+
+    #[Test]
+    public function it_allows_listeners_to_subscribe_to_the_base_webdav_account_event(): void
+    {
+        $user = User::factory()->create();
+        $account = $this->createAccount($user, ['username' => 'base-listener']);
+        $capturedEvent = null;
+
+        Event::listen(WebDavAccountEvent::class, function (WebDavAccountEvent $event) use (&$capturedEvent): void {
+            $capturedEvent = $event;
+        });
+
+        (new WebDavAccountUpdatedEvent($account))->dispatchForListeners();
+
+        self::assertInstanceOf(WebDavAccountUpdatedEvent::class, $capturedEvent);
+        self::assertSame(WebDavAccountUpdatedEvent::ACTION, $capturedEvent->action);
+        self::assertTrue($account->is($capturedEvent->record));
     }
 
     #[Test]
@@ -219,6 +249,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     #[Test]
     public function it_creates_a_webdav_account_via_the_create_form(): void
     {
+        Event::fake([WebDavAccountCreatedEvent::class, WebDavAccountEvent::class]);
         Notification::fake();
         $actingUser = User::factory()->create();
         $targetUser = User::factory()->create();
@@ -244,6 +275,11 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         self::assertTrue($account->enabled);
         self::assertSame(['quota' => '1GB'], $account->meta);
         self::assertTrue(Hash::check('Secret1234!', $account->password_encrypted));
+        $this->assertWebDavAccountEventDispatched(
+            WebDavAccountCreatedEvent::class,
+            WebDavAccountCreatedEvent::ACTION,
+            $account->getKey(),
+        );
 
         Notification::assertSentTo(
             $targetUser,
@@ -312,6 +348,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     #[Test]
     public function it_updates_a_webdav_account_without_changing_the_password_when_password_is_left_empty(): void
     {
+        Event::fake([WebDavAccountUpdatedEvent::class, WebDavAccountEvent::class]);
         $user = User::factory()->create();
         $this->actingAs($user);
         $oldHash = Hash::make('original-password');
@@ -338,6 +375,11 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
         self::assertSame('New Name', $fresh->display_name);
         self::assertSame($oldHash, $fresh->password_encrypted);
+        $this->assertWebDavAccountEventDispatched(
+            WebDavAccountUpdatedEvent::class,
+            WebDavAccountUpdatedEvent::ACTION,
+            $fresh->getKey(),
+        );
     }
 
     #[Test]
@@ -488,6 +530,30 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             ])
             ->assertSee('WebDAV URL copied')
             ->assertFormFieldExists('enabled');
+    }
+
+    /**
+     * Assert that a concrete WebDAV account event and the generic base event channel were dispatched.
+     *
+     * @param  class-string<WebDavAccountEvent>  $eventClass  Concrete lifecycle event class expected.
+     * @param  string  $action  Expected lifecycle action value.
+     * @param  int|string  $recordKey  Expected account record key.
+     */
+    private function assertWebDavAccountEventDispatched(string $eventClass, string $action, int|string $recordKey): void
+    {
+        Event::assertDispatched(
+            $eventClass,
+            fn (WebDavAccountEvent $event): bool => $event->action === $action
+                && $event->record->getKey() === $recordKey,
+        );
+
+        Event::assertDispatched(
+            WebDavAccountEvent::class,
+            fn (string $eventName, array $payload): bool => $eventName === WebDavAccountEvent::class
+                && ($event = $payload[0] ?? null) instanceof $eventClass
+                && $event->action === $action
+                && $event->record->getKey() === $recordKey,
+        );
     }
 
     /**

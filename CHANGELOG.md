@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added translation-backed labels and messages for the WebDAV account management UI.
   - Added a read-only, copyable WebDAV URL field to the account view page.
   - Added a reusable Filament `WebDavUrlInput` component for displaying copyable account WebDAV URLs.
+  - Added WebDAV account lifecycle events for create, update, and delete actions.
 
 - **localization**
   - Added German translations for the WebDAV account management UI.

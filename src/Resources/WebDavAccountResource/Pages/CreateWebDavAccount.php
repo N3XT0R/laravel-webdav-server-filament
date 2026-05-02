@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 use N3XT0R\LaravelWebdavServer\Exception\Auth\DuplicateUsernameException;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountCreatedEvent;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountCreatedNotification;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
 
@@ -43,6 +44,8 @@ final class CreateWebDavAccount extends CreateRecord
 
         $account->setAttribute('meta', ($data['meta'] ?? null) ?: null);
         $account->save();
+
+        (new WebDavAccountCreatedEvent($account))->dispatchForListeners();
 
         $this->notifyLinkedUser($account, (string) $data['password']);
 
