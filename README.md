@@ -55,11 +55,11 @@ $panel->plugin(LaravelWebdavServerFilamentPlugin::make());
 
 The admin-facing resource is registered by default and gives administrators full control over all WebDAV accounts:
 
-- create accounts and link them to application users
-- edit username, display name, password, enabled state, and metadata
-- reset passwords with optional notification delivery
-- view the copyable WebDAV URL per account
-- bulk enable, disable, or delete accounts
+- create accounts and link them to an application user; the linked user cannot be changed after creation
+- edit username, display name, password, enabled state, and optional metadata key-value pairs
+- reset passwords via a dedicated action in the table and edit page header, with optional notification delivery to the linked user
+- view a read-only, copyable WebDAV URL on the account view page
+- bulk enable, bulk disable, or bulk delete accounts from the list
 
 To disable it on a panel:
 
@@ -90,8 +90,10 @@ LaravelWebdavServerFilamentPlugin::make()
 
 The user resource:
 
-- scopes all queries to the authenticated user's own accounts
-- does not expose a user select field — `user_id` is set automatically on creation
+- scopes all queries to the authenticated user's own accounts — other users' accounts are never visible
+- create, edit, view, and delete own accounts; password changes go through the edit form
+- does not expose a user select field — `user_id` is set automatically to the authenticated user on creation
+- does not include bulk enable/disable — only bulk delete is available
 - enforces access at page mount level, independent of `canAccess()`, so it is compatible with Filament Shield and other authorization packages
 
 ---
@@ -111,7 +113,7 @@ The user resource:
 
 ### User Select Field
 
-Replace the default user search with your own query and labels:
+The admin resource includes a searchable user select field by default. Replace it with your own configuration by passing a callback that receives and returns the `Select` component:
 
 ```php
 use Filament\Forms\Components\Select;
@@ -120,7 +122,7 @@ use App\Models\User;
 LaravelWebdavServerFilamentPlugin::make()
     ->userSelectUsing(function (Select $select): Select {
         return $select
-            ->options(User::pluck('name', 'id'))
+            ->options(User::active()->pluck('name', 'id'))
             ->searchable();
     });
 ```
