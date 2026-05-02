@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace N3XT0R\LaravelWebdavServerFilament\Tests\Feature\Resources;
 
+use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
+use N3XT0R\LaravelWebdavServer\Facades\WebDavPath;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\CreateWebDavAccount;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\EditWebDavAccount;
@@ -356,10 +358,21 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             'username' => 'view-me',
             'display_name' => 'View Me',
         ]);
+        $webDavUrl = rtrim(WebDavPath::resolveUrl('default'), '/') . '/' . $account->user_id;
 
         Livewire::test(ViewWebDavAccount::class, ['record' => $account->getKey()])
             ->assertFormFieldExists('username')
             ->assertFormFieldExists('display_name')
+            ->assertFormFieldExists('webdav_url', function (TextInput $field): bool {
+                self::assertTrue($field->isReadOnly());
+                self::assertTrue($field->isCopyable());
+
+                return true;
+            })
+            ->assertFormSet([
+                'webdav_url' => $webDavUrl,
+            ])
+            ->assertSee('WebDAV URL copied')
             ->assertFormFieldExists('enabled');
     }
 

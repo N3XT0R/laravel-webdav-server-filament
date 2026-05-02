@@ -23,6 +23,7 @@ return [
                 'meta_key' => 'Key',
                 'meta_value' => 'Value',
                 'created_at' => 'Created',
+                'webdav_url' => 'WebDAV URL',
             ],
             'placeholders' => [
                 'display_name' => 'Falls back to username when left empty',
@@ -43,6 +44,7 @@ return [
             ],
             'notifications' => [
                 'password_reset' => 'Password reset successfully',
+                'webdav_url_copied' => 'WebDAV URL copied',
             ],
         ],
     ],
