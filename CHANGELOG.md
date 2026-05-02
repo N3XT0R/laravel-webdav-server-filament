@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added plugin configuration for disabling the account resource and customizing the linked user select field.
   - Added translation-backed labels and messages for the WebDAV account management UI.
   - Added a read-only, copyable WebDAV URL field to the account view page.
+  - Added a reusable Filament `WebDavUrlInput` component for displaying copyable account WebDAV URLs.
 
 - **localization**
   - Added German translations for the WebDAV account management UI.
