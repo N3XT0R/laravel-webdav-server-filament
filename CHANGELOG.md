@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **documentation**
   - Added structured documentation for getting started, developer experience, user experience, and operations.
+  - Reworked documentation navigation around tasks and workflows instead of reader personas.
+  - Renamed documentation sections around natural package topics such as installation, account management, extension, and operations.
 
 ### Changed
 

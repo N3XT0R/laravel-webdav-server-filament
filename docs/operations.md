@@ -1,6 +1,6 @@
 # Operations
 
-## Operational Responsibilities
+## Responsibilities
 
 This package provides account management tooling. Your application remains responsible for:
 
