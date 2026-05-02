@@ -29,18 +29,18 @@ final class ResetPasswordAction extends Action
         parent::setUp();
 
         $this
-            ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.actions.reset_password'))
+            ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.reset_password'))
             ->icon('heroicon-o-key')
             ->schema([
                 TextInput::make('password')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.new_password'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password'))
                     ->password()
                     ->revealable()
                     ->required()
-                    ->default(fn (): string => Str::password(16)),
+                    ->default(fn(): string => Str::password(16)),
 
                 TextInput::make('password_confirmation')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.new_password_confirmation'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password_confirmation'))
                     ->password()
                     ->revealable()
                     ->required()
@@ -54,7 +54,7 @@ final class ResetPasswordAction extends Action
 
                 Notification::make()
                     ->success()
-                    ->title(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.notifications.password_reset'))
+                    ->title(__('webdav-server-filament::webdav-server-filament.resources.accounts.notifications.password_reset'))
                     ->send();
             });
     }
