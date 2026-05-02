@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\DTO\Management\AccountUpdateDto;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
+use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
 
 final class ResetPasswordAction extends Action
 {
@@ -29,33 +30,59 @@ final class ResetPasswordAction extends Action
         parent::setUp();
 
         $this
-            ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.actions.reset_password'))
+            ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.reset_password'))
             ->icon('heroicon-o-key')
             ->schema([
                 TextInput::make('password')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.new_password'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password'))
                     ->password()
                     ->revealable()
                     ->required()
                     ->default(fn (): string => Str::password(16)),
 
                 TextInput::make('password_confirmation')
-                    ->label(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.fields.new_password_confirmation'))
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password_confirmation'))
                     ->password()
                     ->revealable()
                     ->required()
                     ->same('password'),
             ])
             ->action(function (Model $record, array $data): void {
-                app(AccountManagementService::class)->update(
+                $password = (string)$data['password'];
+
+                $result = app(AccountManagementService::class)->update(
                     $record,
-                    new AccountUpdateDto(password: $data['password']),
+                    new AccountUpdateDto(password: $password),
                 );
 
-                Notification::make()
-                    ->success()
-                    ->title(__('laravel-webdav-server-filament::laravel-webdav-server-filament.resources.accounts.notifications.password_reset'))
-                    ->send();
+                if ($result) {
+                    $this->notifyLinkedUser($record, $password);
+
+                    Notification::make()
+                        ->success()
+                        ->title(__(
+                            'webdav-server-filament::webdav-server-filament.resources.accounts.notifications.password_reset'
+                        ))
+                        ->send();
+                }
             });
+    }
+
+    private function notifyLinkedUser(Model $record, string $password): void
+    {
+        if (! (bool) config('laravel-webdav-server-filament.notifications.enabled', true)) {
+            return;
+        }
+
+        $notifiable = $record->getAttribute('user') ?? $record->user;
+
+        if (!is_object($notifiable) || !method_exists($notifiable, 'notify')) {
+            return;
+        }
+
+        $notifiable->notify(new WebDavAccountPasswordResetNotification(
+            username: (string)$record->getAttribute('username'),
+            password: $password,
+        ));
     }
 }

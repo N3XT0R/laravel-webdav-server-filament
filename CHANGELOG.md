@@ -14,6 +14,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added reusable password reset actions and bulk enable/disable controls for WebDAV account records.
   - Added plugin configuration for disabling the account resource and customizing the linked user select field.
   - Added translation-backed labels and messages for the WebDAV account management UI.
+  - Added a read-only, copyable WebDAV URL field to the account view page.
+  - Added a reusable Filament `WebDavUrlInput` component for displaying copyable account WebDAV URLs.
+  - Added WebDAV account lifecycle events for create, update, and delete actions.
 
 - **localization**
   - Added German translations for the WebDAV account management UI.
+
+- **configuration**
+  - Added a `notifications.enabled` configuration flag for enabling or disabling WebDAV account notifications.
+
+- **documentation**
+  - Added structured documentation for getting started, developer experience, user experience, and operations.
+
+### Changed
+
+- **filament resource**
+  - Prevented changing the linked Laravel user after a WebDAV account has been created.
+  - Send a Laravel notification to the linked user when a WebDAV account password is reset.
+  - Send a Laravel notification with account, user, timestamp, and password details when a WebDAV account is created.

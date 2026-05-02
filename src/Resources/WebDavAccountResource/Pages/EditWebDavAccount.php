@@ -12,6 +12,8 @@ use Illuminate\Validation\ValidationException;
 use N3XT0R\LaravelWebdavServer\DTO\Management\AccountUpdateDto;
 use N3XT0R\LaravelWebdavServer\Exception\Auth\DuplicateUsernameException;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountUpdatedEvent;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Actions\ResetPasswordAction;
 
@@ -29,7 +31,8 @@ final class EditWebDavAccount extends EditRecord
         return [
             ViewAction::make(),
             ResetPasswordAction::make(),
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->after(fn (Model $record): mixed => (new WebDavAccountDeletedEvent($record))->dispatchForListeners()),
         ];
     }
 
@@ -71,6 +74,10 @@ final class EditWebDavAccount extends EditRecord
         $record->setAttribute('meta', ($data['meta'] ?? null) ?: null);
         $record->save();
 
-        return $record->refresh();
+        $record = $record->refresh();
+
+        (new WebDavAccountUpdatedEvent($record))->dispatchForListeners();
+
+        return $record;
     }
 }

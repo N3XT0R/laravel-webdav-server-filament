@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Actions\ResetPasswordAction;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages;
@@ -142,7 +143,7 @@ final class WebDavAccountResource extends Resource
                 ViewAction::make(),
                 EditAction::make(),
                 ResetPasswordAction::make(),
-                DeleteAction::make(),
+                static::deleteAction(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -210,6 +211,7 @@ final class WebDavAccountResource extends Resource
     {
         $select = Select::make('user_id')
             ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.user'))
+            ->disabledOn('edit')
             ->required();
 
         try {
@@ -233,5 +235,11 @@ final class WebDavAccountResource extends Resource
                 ->pluck('name', 'id')
                 ->toArray())
             ->getOptionLabelUsing(fn (mixed $value): string => $userModel::find($value)?->name ?? (string)$value);
+    }
+
+    private static function deleteAction(): DeleteAction
+    {
+        return DeleteAction::make()
+            ->after(fn (Model $record): mixed => (new WebDavAccountDeletedEvent($record))->dispatchForListeners());
     }
 }
