@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **configuration**
   - Added a `notifications.enabled` configuration flag for enabling or disabling WebDAV account notifications.
 
+- **documentation**
+  - Added structured documentation for getting started, developer experience, user experience, and operations.
+
 ### Changed
 
 - **filament resource**
