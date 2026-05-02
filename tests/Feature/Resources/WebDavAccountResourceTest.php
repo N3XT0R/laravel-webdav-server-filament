@@ -198,6 +198,25 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     }
 
     #[Test]
+    public function it_does_not_notify_the_user_after_password_reset_when_notifications_are_disabled(): void
+    {
+        Notification::fake();
+        config()->set('laravel-webdav-server-filament.notifications.enabled', false);
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $account = $this->createAccount($user, ['username' => 'silent-reset']);
+
+        Livewire::test(ListWebDavAccounts::class)
+            ->callTableAction('resetPassword', $account, data: [
+                'password' => 'SilentSecret1234!',
+                'password_confirmation' => 'SilentSecret1234!',
+            ])
+            ->assertHasNoTableActionErrors();
+
+        Notification::assertNothingSent();
+    }
+
+    #[Test]
     public function it_creates_a_webdav_account_via_the_create_form(): void
     {
         Notification::fake();
@@ -244,6 +263,31 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
                     && $notification->getCreatedAt()->equalTo($account->created_at);
             },
         );
+    }
+
+    #[Test]
+    public function it_does_not_notify_the_user_after_account_creation_when_notifications_are_disabled(): void
+    {
+        Notification::fake();
+        config()->set('laravel-webdav-server-filament.notifications.enabled', false);
+        $actingUser = User::factory()->create();
+        $targetUser = User::factory()->create();
+        $this->actingAs($actingUser);
+
+        Livewire::test(CreateWebDavAccount::class)
+            ->fillForm([
+                'username' => 'silent-account',
+                'display_name' => 'Silent Account',
+                'password' => 'Secret1234!',
+                'password_confirmation' => 'Secret1234!',
+                'user_id' => $targetUser->id,
+                'enabled' => true,
+                'meta' => null,
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        Notification::assertNothingSent();
     }
 
     #[Test]

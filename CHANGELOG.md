@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **localization**
   - Added German translations for the WebDAV account management UI.
 
+- **configuration**
+  - Added a `notifications.enabled` configuration flag for enabling or disabling WebDAV account notifications.
+
 ### Changed
 
 - **filament resource**

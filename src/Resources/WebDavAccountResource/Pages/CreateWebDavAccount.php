@@ -51,6 +51,10 @@ final class CreateWebDavAccount extends CreateRecord
 
     private function notifyLinkedUser(Model $record, string $password): void
     {
+        if (! (bool) config('laravel-webdav-server-filament.notifications.enabled', true)) {
+            return;
+        }
+
         $notifiable = $record->getAttribute('user') ?? $record->user;
 
         if (! is_object($notifiable) || ! method_exists($notifiable, 'notify')) {

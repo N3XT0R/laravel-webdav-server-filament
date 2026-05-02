@@ -51,4 +51,12 @@ final class PluginConfigurationTest extends TestCase
     {
         self::assertNull(LaravelWebdavServerFilamentPlugin::make()->getUserSelectCallback());
     }
+
+    #[Test]
+    public function it_enables_notifications_by_default(): void
+    {
+        $config = require __DIR__ . '/../../config/laravel-webdav-server-filament.php';
+
+        self::assertTrue($config['notifications']['enabled']);
+    }
 }
