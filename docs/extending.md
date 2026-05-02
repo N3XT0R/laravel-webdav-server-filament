@@ -5,35 +5,65 @@
 This package is an admin integration, not the WebDAV runtime.
 
 The core package owns authentication, storage resolution, path resolution, and request handling. This package owns the
-Filament resource and the supporting UI workflows around WebDAV account management.
+Filament resources and the supporting UI workflows around WebDAV account management.
 
-## Main Extension Points
-
-### Plugin Configuration
+## Plugin Configuration
 
 Register the plugin per panel:
 
 ```php
-LaravelWebdavServerFilamentPlugin::make()
+use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
+
+$panel->plugin(LaravelWebdavServerFilamentPlugin::make());
 ```
 
-You can disable the account resource:
+### Admin Resource
+
+The admin-facing resource is registered by default. Disable it when the panel should not expose it:
 
 ```php
 LaravelWebdavServerFilamentPlugin::make()
-    ->withoutAccountResource();
+    ->withoutAdminAccountResource();
 ```
 
-You can customize the user select field:
+### User Resource (self-service)
+
+The user-facing resource is disabled by default. Enable it for all authenticated users:
 
 ```php
+LaravelWebdavServerFilamentPlugin::make()
+    ->withUserAccountResource();
+```
+
+Enable it conditionally based on a callback that receives the authenticated user:
+
+```php
+LaravelWebdavServerFilamentPlugin::make()
+    ->userAccountResourceEnabledUsing(
+        fn (User $user): bool => $user->hasVerifiedEmail()
+    );
+```
+
+The callback runs on every navigation and page mount check. Keep it fast — avoid database queries inside it unless
+the result is cached.
+
+The user resource enforces its access check independently of `canAccess()`, which means it is compatible with Filament
+Shield and other authorization packages that extend `canAccess()`.
+
+### User Select Field
+
+Customize the user search field in the admin resource:
+
+```php
+use Filament\Forms\Components\Select;
+
 LaravelWebdavServerFilamentPlugin::make()
     ->userSelectUsing(function (Select $select): Select {
         return $select->label('Owner');
     });
 ```
 
-### Notifications
+## Notifications
 
 The package sends Laravel notifications for:
 
@@ -48,23 +78,23 @@ Notifications can be disabled globally:
 ],
 ```
 
-The notifications use the `mail` channel today. They are Laravel notification classes, so applications can extend the
-idea with additional channels if needed.
+The notifications use the `mail` channel. They are standard Laravel notification classes, so applications can extend
+the idea with additional channels if needed by publishing and overriding the notification classes.
 
-### Lifecycle Events
+## Lifecycle Events
 
 The package dispatches lifecycle events for:
 
-- account created
-- account updated
-- account deleted
+- account created — `WebDavAccountCreatedEvent`
+- account updated — `WebDavAccountUpdatedEvent`
+- account deleted — `WebDavAccountDeletedEvent`
 
-Concrete events extend `WebDavAccountEvent` and expose:
+All concrete events extend `WebDavAccountEvent` and expose:
 
 - `record`: the affected WebDAV account model
-- `action`: the lifecycle action
+- `action`: the lifecycle action string
 
-Applications can listen to concrete events when behavior should be specific:
+Listen to a concrete event for a specific workflow:
 
 ```php
 use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountCreatedEvent;
@@ -74,7 +104,7 @@ Event::listen(WebDavAccountCreatedEvent::class, function (WebDavAccountCreatedEv
 });
 ```
 
-Applications can also listen to the base event channel:
+Listen to the base event for generic observability across all lifecycle actions:
 
 ```php
 use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountEvent;
@@ -87,11 +117,9 @@ Event::listen(WebDavAccountEvent::class, function (WebDavAccountEvent $event): v
 });
 ```
 
-This is useful for generic audit logging, metrics, or system-wide observability.
-
 ## Resource Behavior
 
-### Create
+### Admin Resource — Create
 
 Creating an account:
 
@@ -103,7 +131,7 @@ Creating an account:
 
 The plain password is only available during the create request and is used for notification delivery.
 
-### Edit
+### Admin Resource — Edit
 
 Editing an account:
 
@@ -111,23 +139,39 @@ Editing an account:
 - cannot change the linked application user after creation
 - dispatches lifecycle events after successful persistence
 
-### View
+### User Resource — Create
+
+Creating an account through the user-facing resource:
+
+- automatically links the account to the currently authenticated user
+- does not expose a user select field
+- otherwise follows the same service and event workflow as the admin resource
+
+### User Resource — Edit
+
+Editing an account through the user-facing resource:
+
+- supports the same fields as the admin edit page, excluding the user select
+- the linked user cannot be changed
+
+### View Page (both resources)
 
 The view page adds a read-only `WebDavUrlInput` component. It resolves the URL through the core package `WebDavPath`
 facade and provides a copy action.
 
 ### Delete
 
-Delete actions dispatch lifecycle events after successful deletion. Consumers can use the event record for logging even
-after the model has been deleted.
+Delete actions dispatch lifecycle events after successful deletion. Consumers can use the event record for logging
+even after the model has been deleted.
 
 ## Testing Guidance
 
 Run PHP and Composer commands inside the Docker PHP container:
 
 ```bash
-docker compose exec -T php composer test:lint
-docker compose exec -T php vendor/bin/phpunit tests/Feature/Resources/WebDavAccountResourceTest.php
+docker compose exec php composer test:lint
+docker compose exec php vendor/bin/phpunit tests/Feature/Resources/WebDavAccountResourceTest.php
+docker compose exec php vendor/bin/phpunit tests/Feature/Resources/UserWebDavAccountResourceTest.php
 ```
 
 Prefer targeted tests while developing. Run the full suite only when a change crosses multiple boundaries.

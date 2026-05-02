@@ -6,29 +6,20 @@
 [![Maintainability](https://qlty.sh/gh/N3XT0R/projects/laravel-webdav-server-filament/maintainability.svg)](https://qlty.sh/gh/N3XT0R/projects/laravel-webdav-server-filament)
 [![Code Coverage](https://qlty.sh/gh/N3XT0R/projects/laravel-webdav-server-filament/coverage.svg)](https://qlty.sh/gh/N3XT0R/projects/laravel-webdav-server-filament)
 
-Official Filament admin panel for [`laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server).
+Official Filament plugin for [`n3xt0r/laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server).
 
-Manage WebDAV accounts, storage access, and configuration through a structured UI.
-
----
-
-## Overview
-
-This package provides a Filament-based admin interface for the Laravel WebDAV Server.
-
-It allows you to manage WebDAV-related configuration and entities without interacting directly with the database or
-configuration files.
-
-The integration is designed to work on top of the stable extension points of the core package.
+Adds WebDAV account management to any Filament panel — for administrators managing accounts on behalf of users, and optionally for users managing their own accounts directly.
 
 ---
 
 ## Requirements
 
-- PHP 8.4+
-- Laravel 12+
-- Filament 5+
-- [`n3xt0r/laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server)
+| Dependency | Version |
+|---|---|
+| PHP | 8.4+ |
+| Laravel | 12+ |
+| Filament | 5+ |
+| `n3xt0r/laravel-webdav-server` | compatible release |
 
 ---
 
@@ -38,7 +29,7 @@ The integration is designed to work on top of the stable extension points of the
 composer require n3xt0r/laravel-webdav-server-filament
 ```
 
-If needed, publish configuration:
+Publish the configuration when you need to change defaults:
 
 ```bash
 php artisan vendor:publish --tag="laravel-webdav-server-filament-config"
@@ -46,98 +37,148 @@ php artisan vendor:publish --tag="laravel-webdav-server-filament-config"
 
 ---
 
-## Features
+## Plugin Registration
 
-- Manage WebDAV accounts (create, update, disable)
-- Inspect account configuration used for authentication
-- Display WebDAV endpoint URLs per account
-- Quick access to connection details (username / endpoint)
-- Integration with existing storage and authorization configuration
-- Designed to work with the package's account model (`webdav-server.auth.account_model`)
+Register the plugin on any Filament panel:
 
----
+```php
+use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 
-## Available Resources
-
-### WebDAV Accounts
-
-A Filament resource for managing WebDAV accounts:
-
-- create and update accounts
-- activate / deactivate accounts
-- view account identifiers used during authentication
-- inspect related storage access
-
----
-
-## Example Usage
-
-After installation, navigate to your Filament panel.
-
-A new section for WebDAV management will be available.
-
-Typical workflow:
-
-1. Create a new WebDAV account
-2. Assign or verify storage configuration
-3. Use the displayed endpoint:
-
-```text
-https://your-domain.test/webdav/default/
+$panel->plugin(LaravelWebdavServerFilamentPlugin::make());
 ```
 
-4. Connect using a WebDAV client (e.g. WinSCP, Finder, Windows Explorer)
+---
+
+## Resources
+
+### Admin Resource
+
+The admin-facing resource is registered by default and gives administrators full control over all WebDAV accounts:
+
+- create accounts and link them to application users
+- edit username, display name, password, enabled state, and metadata
+- reset passwords with optional notification delivery
+- view the copyable WebDAV URL per account
+- bulk enable, disable, or delete accounts
+
+To disable it on a panel:
+
+```php
+LaravelWebdavServerFilamentPlugin::make()
+    ->withoutAdminAccountResource();
+```
+
+### User Resource (self-service)
+
+The user-facing resource is **disabled by default**. When enabled, it lets authenticated users manage their own WebDAV accounts directly without admin involvement.
+
+Enable it for all authenticated users:
+
+```php
+LaravelWebdavServerFilamentPlugin::make()
+    ->withUserAccountResource();
+```
+
+Enable it conditionally — for example, only for users with a verified e-mail address:
+
+```php
+LaravelWebdavServerFilamentPlugin::make()
+    ->userAccountResourceEnabledUsing(
+        fn (User $user): bool => $user->hasVerifiedEmail()
+    );
+```
+
+The user resource:
+
+- scopes all queries to the authenticated user's own accounts
+- does not expose a user select field — `user_id` is set automatically on creation
+- enforces access at page mount level, independent of `canAccess()`, so it is compatible with Filament Shield and other authorization packages
 
 ---
 
-## Integration Details
+## Plugin API
 
-This package does not replace any core functionality.
-
-It builds on top of:
-
-- `AccountRepositoryInterface`
-- `CredentialValidatorInterface`
-- `PathAuthorizationInterface`
-
-All behavior remains configurable through the core package.
+| Method | Description |
+|---|---|
+| `withoutAdminAccountResource()` | Disable the admin-facing resource on this panel |
+| `withUserAccountResource()` | Enable the user-facing self-service resource for all authenticated users |
+| `userAccountResourceEnabledUsing(callable $fn)` | Enable the user-facing resource conditionally via callback |
+| `userSelectUsing(callable $fn)` | Customize the user select field in the admin resource |
 
 ---
 
 ## Customization
 
-You can extend or override Filament resources as needed:
+### User Select Field
 
-- extend the provided Resource classes
-- customize forms, tables, and actions
-- integrate with your existing Filament panels
+Replace the default user search with your own query and labels:
 
----
+```php
+use Filament\Forms\Components\Select;
+use App\Models\User;
 
-## Relationship to Core Package
+LaravelWebdavServerFilamentPlugin::make()
+    ->userSelectUsing(function (Select $select): Select {
+        return $select
+            ->options(User::pluck('name', 'id'))
+            ->searchable();
+    });
+```
 
-This package is a companion to:
+### Notifications
 
-👉 https://github.com/N3XT0R/laravel-webdav-server
+Notifications are enabled by default for account creation and password reset.
 
-The core package provides:
+Disable globally in `config/laravel-webdav-server-filament.php`:
 
-- WebDAV server runtime
-- request pipeline
-- storage resolution
-- authentication and authorization
+```php
+'notifications' => [
+    'enabled' => false,
+],
+```
 
-This package provides:
+### Lifecycle Events
 
-- administrative UI
-- account management
-- operational visibility
+The package dispatches events for every account lifecycle action:
+
+```php
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountCreatedEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountUpdatedEvent;
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
+
+// Listen to a specific lifecycle action
+Event::listen(WebDavAccountCreatedEvent::class, function (WebDavAccountCreatedEvent $event): void {
+    // $event->record is the created WebDavAccountModel
+});
+
+// Or listen to the base event for all lifecycle actions
+use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountEvent;
+
+Event::listen(WebDavAccountEvent::class, function (WebDavAccountEvent $event): void {
+    logger()->info('webdav.account.' . $event->action, ['id' => $event->record->getKey()]);
+});
+```
 
 ---
 
 ## Documentation
 
-For full WebDAV server documentation, see:
+Full documentation is available in the [`docs/`](docs/index.md) directory:
+
+- [Installation](docs/installation.md)
+- [Account Management](docs/account-management.md)
+- [Extending The Package](docs/extending.md)
+- [Operations](docs/operations.md)
+
+---
+
+## Core Package
+
+This package is a companion to the core WebDAV server:
+
+👉 https://github.com/N3XT0R/laravel-webdav-server
+
+Core package documentation:
 
 👉 https://laravel-webdav-server.readthedocs.io/en/latest/
 
