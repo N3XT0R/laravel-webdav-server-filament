@@ -12,11 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **filament resource**
   - Added a Filament resource for managing WebDAV accounts through list, create, edit, and view pages.
   - Added reusable password reset actions and bulk enable/disable controls for WebDAV account records.
-  - Added plugin configuration for disabling the account resource and customizing the linked user select field.
+  - Added plugin configuration via `withoutAdminAccountResource()` for disabling the account resource and customizing the linked user select field.
   - Added translation-backed labels and messages for the WebDAV account management UI.
   - Added a read-only, copyable WebDAV URL field to the account view page.
   - Added a reusable Filament `WebDavUrlInput` component for displaying copyable account WebDAV URLs.
   - Added WebDAV account lifecycle events for create, update, and delete actions.
+  - Added enforcement to prevent changing the linked Laravel user after a WebDAV account has been created.
+  - Added a Laravel notification to the linked user when a WebDAV account password is reset.
+  - Added a Laravel notification with account, user, timestamp, and password details when a WebDAV account is created.
 
 - **user-facing account resource**
   - Added a self-service Filament resource that lets authenticated users manage their own WebDAV accounts without admin access.
@@ -35,11 +38,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added structured documentation for getting started, developer experience, user experience, and operations.
   - Reworked documentation navigation around tasks and workflows instead of reader personas.
   - Renamed documentation sections around natural package topics such as installation, account management, extension, and operations.
-
-### Changed
-
-- **filament resource**
-  - Prevented changing the linked Laravel user after a WebDAV account has been created.
-  - Send a Laravel notification to the linked user when a WebDAV account password is reset.
-  - Send a Laravel notification with account, user, timestamp, and password details when a WebDAV account is created.
-  - Renamed plugin method `withoutAccountResource()` to `withoutAdminAccountResource()` to distinguish it from the new user-facing resource.
