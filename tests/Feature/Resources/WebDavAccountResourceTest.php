@@ -47,7 +47,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             ->assertFormFieldExists('display_name')
             ->assertFormFieldExists('password')
             ->assertFormFieldExists('password_confirmation')
-            ->assertFormFieldExists('user_id')
+            ->assertFormFieldDisabled('user_id')
             ->assertFormFieldExists('enabled')
             ->assertFormFieldExists('meta');
     }
@@ -254,6 +254,36 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
         self::assertSame('New Name', $fresh->display_name);
         self::assertSame($oldHash, $fresh->password_encrypted);
+    }
+
+    #[Test]
+    public function it_does_not_allow_changing_the_linked_user_on_edit(): void
+    {
+        $originalUser = User::factory()->create();
+        $newUser = User::factory()->create();
+        $this->actingAs($originalUser);
+        $account = $this->createAccount($originalUser, [
+            'username' => 'locked-user',
+            'display_name' => 'Locked User',
+        ]);
+
+        Livewire::test(EditWebDavAccount::class, ['record' => $account->getKey()])
+            ->fillForm([
+                'username' => 'locked-user',
+                'display_name' => 'Locked User Updated',
+                'password' => '',
+                'password_confirmation' => '',
+                'user_id' => $newUser->id,
+                'enabled' => true,
+                'meta' => null,
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $fresh = $account->fresh();
+
+        self::assertSame($originalUser->id, $fresh->user_id);
+        self::assertSame('Locked User Updated', $fresh->display_name);
     }
 
     #[Test]

@@ -210,6 +210,7 @@ final class WebDavAccountResource extends Resource
     {
         $select = Select::make('user_id')
             ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.user'))
+            ->disabledOn('edit')
             ->required();
 
         try {

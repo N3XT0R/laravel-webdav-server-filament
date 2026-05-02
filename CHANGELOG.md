@@ -19,3 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **localization**
   - Added German translations for the WebDAV account management UI.
+
+### Changed
+
+- **filament resource**
+  - Prevented changing the linked Laravel user after a WebDAV account has been created.
