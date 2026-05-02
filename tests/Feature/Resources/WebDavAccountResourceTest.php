@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace N3XT0R\LaravelWebdavServerFilament\Tests\Feature\Resources;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use N3XT0R\LaravelWebdavServer\Facades\WebDavPath;
 use N3XT0R\LaravelWebdavServerFilament\Filament\Forms\Components\WebDavUrlInput;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
+use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\CreateWebDavAccount;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\EditWebDavAccount;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\ListWebDavAccounts;
@@ -159,6 +161,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     #[Test]
     public function it_resets_the_password_via_table_action(): void
     {
+        Notification::fake();
         $user = User::factory()->create();
         $this->actingAs($user);
         $account = $this->createAccount($user, ['username' => 'reset-me']);
@@ -175,6 +178,22 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
         self::assertNotSame($oldHash, $newHash);
         self::assertTrue(Hash::check('NewSecret1234!', $newHash));
+
+        Notification::assertSentTo(
+            $user,
+            WebDavAccountPasswordResetNotification::class,
+            function (WebDavAccountPasswordResetNotification $notification, array $channels) use ($user): bool {
+                $mail = $notification->toMail($user);
+
+                self::assertSame('Your WebDAV password was reset', $mail->subject);
+                self::assertContains('The password for your WebDAV account "reset-me" was reset.', $mail->introLines);
+                self::assertContains('New password: NewSecret1234!', $mail->introLines);
+
+                return $channels === ['mail']
+                    && $notification->getUsername() === 'reset-me'
+                    && $notification->getPassword() === 'NewSecret1234!';
+            },
+        );
     }
 
     #[Test]

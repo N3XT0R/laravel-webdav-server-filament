@@ -24,3 +24,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **filament resource**
   - Prevented changing the linked Laravel user after a WebDAV account has been created.
+  - Send a Laravel notification to the linked user when a WebDAV account password is reset.

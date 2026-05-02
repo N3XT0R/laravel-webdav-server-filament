@@ -48,4 +48,13 @@ return [
             ],
         ],
     ],
+    'notifications' => [
+        'password_reset' => [
+            'subject' => 'Your WebDAV password was reset',
+            'greeting' => 'Hello,',
+            'account' => 'The password for your WebDAV account ":username" was reset.',
+            'password' => 'New password: :password',
+            'security' => 'Store this password securely. If you did not request this reset, contact an administrator.',
+        ],
+    ],
 ];

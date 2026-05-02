@@ -48,4 +48,13 @@ return [
             ],
         ],
     ],
+    'notifications' => [
+        'password_reset' => [
+            'subject' => 'Dein WebDAV-Passwort wurde zurückgesetzt',
+            'greeting' => 'Hallo,',
+            'account' => 'Das Passwort für dein WebDAV-Konto ":username" wurde zurückgesetzt.',
+            'password' => 'Neues Passwort: :password',
+            'security' => 'Bewahre dieses Passwort sicher auf. Falls du dieses Zurücksetzen nicht angefordert hast, kontaktiere einen Administrator.',
+        ],
+    ],
 ];

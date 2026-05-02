@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\DTO\Management\AccountUpdateDto;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
+use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
 
 final class ResetPasswordAction extends Action
 {
@@ -47,15 +48,37 @@ final class ResetPasswordAction extends Action
                     ->same('password'),
             ])
             ->action(function (Model $record, array $data): void {
-                app(AccountManagementService::class)->update(
+                $password = (string)$data['password'];
+
+                $result = app(AccountManagementService::class)->update(
                     $record,
-                    new AccountUpdateDto(password: $data['password']),
+                    new AccountUpdateDto(password: $password),
                 );
 
-                Notification::make()
-                    ->success()
-                    ->title(__('webdav-server-filament::webdav-server-filament.resources.accounts.notifications.password_reset'))
-                    ->send();
+                if ($result) {
+                    $this->notifyLinkedUser($record, $password);
+
+                    Notification::make()
+                        ->success()
+                        ->title(__(
+                            'webdav-server-filament::webdav-server-filament.resources.accounts.notifications.password_reset'
+                        ))
+                        ->send();
+                }
             });
+    }
+
+    private function notifyLinkedUser(Model $record, string $password): void
+    {
+        $notifiable = $record->getAttribute('user') ?? $record->user;
+
+        if (!is_object($notifiable) || !method_exists($notifiable, 'notify')) {
+            return;
+        }
+
+        $notifiable->notify(new WebDavAccountPasswordResetNotification(
+            username: (string)$record->getAttribute('username'),
+            password: $password,
+        ));
     }
 }
