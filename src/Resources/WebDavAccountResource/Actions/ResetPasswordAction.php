@@ -38,7 +38,7 @@ final class ResetPasswordAction extends Action
                     ->password()
                     ->revealable()
                     ->required()
-                    ->default(fn(): string => Str::password(16)),
+                    ->default(fn (): string => Str::password(16)),
 
                 TextInput::make('password_confirmation')
                     ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password_confirmation'))

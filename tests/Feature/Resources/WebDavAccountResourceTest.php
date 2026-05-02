@@ -11,6 +11,7 @@ use Livewire\Livewire;
 use N3XT0R\LaravelWebdavServer\Facades\WebDavPath;
 use N3XT0R\LaravelWebdavServerFilament\Filament\Forms\Components\WebDavUrlInput;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
+use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountCreatedNotification;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\CreateWebDavAccount;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages\EditWebDavAccount;
@@ -199,6 +200,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
     #[Test]
     public function it_creates_a_webdav_account_via_the_create_form(): void
     {
+        Notification::fake();
         $actingUser = User::factory()->create();
         $targetUser = User::factory()->create();
         $this->actingAs($actingUser);
@@ -223,6 +225,25 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         self::assertTrue($account->enabled);
         self::assertSame(['quota' => '1GB'], $account->meta);
         self::assertTrue(Hash::check('Secret1234!', $account->password_encrypted));
+
+        Notification::assertSentTo(
+            $targetUser,
+            WebDavAccountCreatedNotification::class,
+            function (WebDavAccountCreatedNotification $notification, array $channels) use ($account, $targetUser): bool {
+                $mail = $notification->toMail($targetUser);
+
+                self::assertSame('Your WebDAV account was created', $mail->subject);
+                self::assertContains('WebDAV account: brand-new-account', $mail->introLines);
+                self::assertContains("Linked user: {$targetUser->name} <{$targetUser->email}>", $mail->introLines);
+                self::assertContains('Created at: ' . $account->created_at->toDateTimeString(), $mail->introLines);
+                self::assertContains('Password: Secret1234!', $mail->introLines);
+
+                return $channels === ['mail']
+                    && $notification->getUsername() === 'brand-new-account'
+                    && $notification->getPassword() === 'Secret1234!'
+                    && $notification->getCreatedAt()->equalTo($account->created_at);
+            },
+        );
     }
 
     #[Test]

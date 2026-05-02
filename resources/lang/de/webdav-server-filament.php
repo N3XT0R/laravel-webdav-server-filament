@@ -49,6 +49,15 @@ return [
         ],
     ],
     'notifications' => [
+        'account_created' => [
+            'subject' => 'Dein WebDAV-Konto wurde erstellt',
+            'greeting' => 'Hallo,',
+            'account' => 'WebDAV-Konto: :username',
+            'user' => 'Verknüpfter Benutzer: :user',
+            'created_at' => 'Erstellt am: :created_at',
+            'password' => 'Passwort: :password',
+            'security' => 'Bewahre dieses Passwort sicher auf. Falls du dieses Konto nicht erwartet hast, kontaktiere einen Administrator.',
+        ],
         'password_reset' => [
             'subject' => 'Dein WebDAV-Passwort wurde zurückgesetzt',
             'greeting' => 'Hallo,',

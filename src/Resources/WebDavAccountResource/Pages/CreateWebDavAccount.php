@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages;
 
+use Carbon\CarbonInterface;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 use N3XT0R\LaravelWebdavServer\Exception\Auth\DuplicateUsernameException;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
+use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountCreatedNotification;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
 
 final class CreateWebDavAccount extends CreateRecord
@@ -42,6 +44,36 @@ final class CreateWebDavAccount extends CreateRecord
         $account->setAttribute('meta', ($data['meta'] ?? null) ?: null);
         $account->save();
 
+        $this->notifyLinkedUser($account, (string) $data['password']);
+
         return $account;
+    }
+
+    private function notifyLinkedUser(Model $record, string $password): void
+    {
+        $notifiable = $record->getAttribute('user') ?? $record->user;
+
+        if (! is_object($notifiable) || ! method_exists($notifiable, 'notify')) {
+            return;
+        }
+
+        $createdAt = $record->getAttribute('created_at');
+
+        $notifiable->notify(new WebDavAccountCreatedNotification(
+            username: (string) $record->getAttribute('username'),
+            password: $password,
+            createdAt: $createdAt instanceof CarbonInterface ? $createdAt : now(),
+            userName: $this->readNotifiableString($notifiable, 'name'),
+            userEmail: $this->readNotifiableString($notifiable, 'email'),
+        ));
+    }
+
+    private function readNotifiableString(object $notifiable, string $key): ?string
+    {
+        $value = method_exists($notifiable, 'getAttribute')
+            ? $notifiable->getAttribute($key)
+            : ($notifiable->{$key} ?? null);
+
+        return is_scalar($value) ? (string) $value : null;
     }
 }
