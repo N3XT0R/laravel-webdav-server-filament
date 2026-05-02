@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added a reusable Filament `WebDavUrlInput` component for displaying copyable account WebDAV URLs.
   - Added WebDAV account lifecycle events for create, update, and delete actions.
 
+- **user-facing account resource**
+  - Added a self-service Filament resource that lets authenticated users manage their own WebDAV accounts without admin access.
+  - Added `withUserAccountResource()` plugin method to enable the user resource for all authenticated users.
+  - Added `userAccountResourceEnabledUsing(callable $fn)` plugin method to enable the user resource conditionally based on the authenticated user.
+  - The user resource is disabled by default and must be explicitly opted in; it is compatible with Filament Shield and other authorization packages.
+  - Pages of the user resource enforce access at mount time independently of `canAccess()` to avoid conflicts with third-party authorization.
+
 - **localization**
   - Added German translations for the WebDAV account management UI.
 
@@ -35,3 +42,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevented changing the linked Laravel user after a WebDAV account has been created.
   - Send a Laravel notification to the linked user when a WebDAV account password is reset.
   - Send a Laravel notification with account, user, timestamp, and password details when a WebDAV account is created.
+  - Renamed plugin method `withoutAccountResource()` to `withoutAdminAccountResource()` to distinguish it from the new user-facing resource.

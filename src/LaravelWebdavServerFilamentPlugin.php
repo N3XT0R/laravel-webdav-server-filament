@@ -8,11 +8,14 @@ use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Forms\Components\Select;
 use Filament\Panel;
+use N3XT0R\LaravelWebdavServerFilament\Resources\UserWebDavAccountResource;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource;
 
 class LaravelWebdavServerFilamentPlugin implements Plugin
 {
-    private bool $accountResourceEnabled = true;
+    private bool $adminAccountResourceEnabled = true;
+
+    private ?Closure $userAccountResourceCallback = null;
 
     private ?Closure $userSelectCallback = null;
 
@@ -33,8 +36,12 @@ class LaravelWebdavServerFilamentPlugin implements Plugin
      */
     public function register(Panel $panel): void
     {
-        if ($this->accountResourceEnabled) {
+        if ($this->adminAccountResourceEnabled) {
             $panel->resources([WebDavAccountResource::class]);
+        }
+
+        if ($this->userAccountResourceCallback !== null) {
+            $panel->resources([UserWebDavAccountResource::class]);
         }
     }
 
@@ -49,15 +56,56 @@ class LaravelWebdavServerFilamentPlugin implements Plugin
     }
 
     /**
-     * Disable automatic registration of the WebDAV account resource.
+     * Disable automatic registration of the admin-facing WebDAV account resource.
      *
      * @return static Current plugin instance for fluent configuration.
      */
-    public function withoutAccountResource(): static
+    public function withoutAdminAccountResource(): static
     {
-        $this->accountResourceEnabled = false;
+        $this->adminAccountResourceEnabled = false;
 
         return $this;
+    }
+
+    /**
+     * Enable the user-facing WebDAV account resource for all authenticated users.
+     *
+     * @return static Current plugin instance for fluent configuration.
+     */
+    public function withUserAccountResource(): static
+    {
+        $this->userAccountResourceCallback = static fn (mixed $user): bool => true;
+
+        return $this;
+    }
+
+    /**
+     * Enable the user-facing WebDAV account resource conditionally based on the given callback.
+     *
+     * The callback receives the currently authenticated user and must return a boolean
+     * indicating whether that user may access the resource.
+     *
+     * @param  callable(mixed): bool  $fn  Callback receiving the authenticated user.
+     * @return static Current plugin instance for fluent configuration.
+     */
+    public function userAccountResourceEnabledUsing(callable $fn): static
+    {
+        $this->userAccountResourceCallback = $fn instanceof Closure ? $fn : Closure::fromCallable($fn);
+
+        return $this;
+    }
+
+    /**
+     * Return the configured user account resource authorization callback, when present.
+     *
+     * Returns null when neither withUserAccountResource() nor userAccountResourceEnabledUsing()
+     * has been called, meaning the user-facing resource is disabled.
+     *
+     * @return Closure|null Callback used to determine user access to the resource.
+     */
+    public function getUserAccountResourceCallback(): ?Closure
+    {
+        return $this->userAccountResourceCallback;
     }
 
     /**
