@@ -6,6 +6,10 @@ on:
     branches: [ 'develop', 'main', '*.*' ]
   pull_request:
     branches: [ 'develop', 'main', '*.*' ]
+
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
