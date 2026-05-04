@@ -1,0 +1,58 @@
+site_name: Laravel WebDAV Server Filament
+site_description: Filament admin panel integration for the Laravel WebDAV Server package.
+site_url: https://laravel-webdav-server-filament.readthedocs.io/
+repo_url: https://github.com/N3XT0R/laravel-webdav-server-filament
+repo_name: N3XT0R/laravel-webdav-server-filament
+edit_uri: edit/5.x/docs/
+
+docs_dir: docs
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Account Management: account-management.md
+  - Operations: operations.md
+  - Extending: extending.md
+  - Architecture:
+      - Overview: adr/index.md
+      - ADR-0001 Test Architecture: adr/0001-test-architecture-and-layering.md
+      - ADR-0002 Class Naming: adr/0002-class-naming-convention-by-suffix.md
+      - ADR-0003 SOLID & Design Patterns: adr/0003-solid-compliance-and-design-patterns.md
+      - ADR-0004 Exception Hierarchies: adr/0004-domain-specific-exception-hierarchies.md
+      - ADR-0005 PHPDoc & Type References: adr/0005-method-level-phpdoc-and-import-based-type-references.md
+      - ADR-0006 Changelog Policy: adr/0006-changelog-maintenance-and-unreleased-entry-policy.md
+      - ADR-0007 Conventional Commits: adr/0007-conventional-commits.md
