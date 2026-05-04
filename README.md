@@ -170,7 +170,9 @@ Event::listen(WebDavAccountEvent::class, function (WebDavAccountEvent $event): v
 
 ## Documentation
 
-Full documentation is available in the [`docs/`](docs/index.md) directory:
+Full documentation: https://laravel-webdav-server-filament.readthedocs.io/en/latest/
+
+Also available locally in the [`docs/`](docs/index.md) directory:
 
 - [Installation](docs/installation.md)
 - [Account Management](docs/account-management.md)
