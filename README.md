@@ -8,17 +8,18 @@
 
 Official Filament plugin for [`n3xt0r/laravel-webdav-server`](https://github.com/N3XT0R/laravel-webdav-server).
 
-Adds WebDAV account management to any Filament panel — for administrators managing accounts on behalf of users, and optionally for users managing their own accounts directly.
+Adds WebDAV account management to any Filament panel — for administrators managing accounts on behalf of users, and
+optionally for users managing their own accounts directly.
 
 ---
 
 ## Requirements
 
-| Dependency | Version |
-|---|---|
-| PHP | 8.4+ |
-| Laravel | 12+ |
-| Filament | 5+ |
+| Dependency                     | Version            | 
+|--------------------------------|--------------------|
+| PHP                            | 8.4+               |
+| Laravel                        | 12+                |
+| Filament                       | 5+                 |
 | `n3xt0r/laravel-webdav-server` | compatible release |
 
 ---
@@ -57,7 +58,8 @@ The admin-facing resource is registered by default and gives administrators full
 
 - create accounts and link them to an application user; the linked user cannot be changed after creation
 - edit username, display name, password, enabled state, and optional metadata key-value pairs
-- reset passwords via a dedicated action in the table and edit page header, with optional notification delivery to the linked user
+- reset passwords via a dedicated action in the table and edit page header, with optional notification delivery to the
+  linked user
 - view a read-only, copyable WebDAV URL on the account view page
 - bulk enable, bulk disable, or bulk delete accounts from the list
 
@@ -70,7 +72,8 @@ LaravelWebdavServerFilamentPlugin::make()
 
 ### User Resource (self-service)
 
-The user-facing resource is **disabled by default**. When enabled, it lets authenticated users manage their own WebDAV accounts directly without admin involvement.
+The user-facing resource is **disabled by default**. When enabled, it lets authenticated users manage their own WebDAV
+accounts directly without admin involvement.
 
 Enable it for all authenticated users:
 
@@ -94,18 +97,19 @@ The user resource:
 - create, edit, view, and delete own accounts; password changes go through the edit form
 - does not expose a user select field — `user_id` is set automatically to the authenticated user on creation
 - does not include bulk enable/disable — only bulk delete is available
-- enforces access at page mount level, independent of `canAccess()`, so it is compatible with Filament Shield and other authorization packages
+- enforces access at page mount level, independent of `canAccess()`, so it is compatible with Filament Shield and other
+  authorization packages
 
 ---
 
 ## Plugin API
 
-| Method | Description |
-|---|---|
-| `withoutAdminAccountResource()` | Disable the admin-facing resource on this panel |
-| `withUserAccountResource()` | Enable the user-facing self-service resource for all authenticated users |
-| `userAccountResourceEnabledUsing(callable $fn)` | Enable the user-facing resource conditionally via callback |
-| `userSelectUsing(callable $fn)` | Customize the user select field in the admin resource |
+| Method                                          | Description                                                              |
+|-------------------------------------------------|--------------------------------------------------------------------------|
+| `withoutAdminAccountResource()`                 | Disable the admin-facing resource on this panel                          |
+| `withUserAccountResource()`                     | Enable the user-facing self-service resource for all authenticated users |
+| `userAccountResourceEnabledUsing(callable $fn)` | Enable the user-facing resource conditionally via callback               |
+| `userSelectUsing(callable $fn)`                 | Customize the user select field in the admin resource                    |
 
 ---
 
@@ -113,7 +117,8 @@ The user resource:
 
 ### User Select Field
 
-The admin resource includes a searchable user select field by default. Replace it with your own configuration by passing a callback that receives and returns the `Select` component:
+The admin resource includes a searchable user select field by default. Replace it with your own configuration by passing
+a callback that receives and returns the `Select` component:
 
 ```php
 use Filament\Forms\Components\Select;
