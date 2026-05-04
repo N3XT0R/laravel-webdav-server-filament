@@ -33,7 +33,7 @@ composer require n3xt0r/laravel-webdav-server-filament
 Publish the configuration when you need to change defaults:
 
 ```bash
-php artisan vendor:publish --tag="laravel-webdav-server-filament-config"
+php artisan vendor:publish --provider="N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentServiceProvider"
 ```
 
 ---
