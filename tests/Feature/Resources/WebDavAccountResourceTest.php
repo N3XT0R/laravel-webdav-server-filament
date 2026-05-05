@@ -514,7 +514,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             'username' => 'view-me',
             'display_name' => 'View Me',
         ]);
-        $webDavUrl = rtrim(WebDavPath::resolveUrl('default'), '/') . '/' . $account->user_id;
+        $webDavUrl = WebDavPath::resolveUrl('default');
 
         Livewire::test(ViewWebDavAccount::class, ['record' => $account->getKey()])
             ->assertFormFieldExists('username')
