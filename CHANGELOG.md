@@ -38,3 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added structured documentation for getting started, developer experience, user experience, and operations.
   - Reworked documentation navigation around tasks and workflows instead of reader personas.
   - Renamed documentation sections around natural package topics such as installation, account management, extension, and operations.
+
+### Fixed
+
+- **filament resource**
+  - Fixed the `WebDavUrlInput` component generating an incorrect WebDAV URL by appending the account ID to the space mount URL (e.g. `/webdav/default/2`). The displayed URL is now the correct space mount URL (e.g. `/webdav/default`).

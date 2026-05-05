@@ -22,18 +22,16 @@ final class WebDavUrlInput extends TextInput
             ->readOnly()
             ->dehydrated(false)
             ->afterStateHydrated(function (WebDavUrlInput $component, ?Model $record): void {
-                $component->state($record === null ? null : $component->resolveWebDavUrl($record));
+                $component->state($record === null ? null : $component->resolveWebDavUrl());
             })
             ->copyable(copyMessage: __('webdav-server-filament::webdav-server-filament.resources.accounts.notifications.webdav_url_copied'))
             ->columnSpanFull();
     }
 
-    private function resolveWebDavUrl(Model $record): string
+    private function resolveWebDavUrl(): string
     {
         $spaceKey = (string) config('webdav-server.storage.default_space', 'default');
-        $principalIdColumn = (string) config('webdav-server.auth.user_id_column', 'id');
-        $principalId = (string) $record->getAttribute($principalIdColumn);
 
-        return rtrim(WebDavPath::resolveUrl($spaceKey), '/') . '/' . rawurlencode($principalId);
+        return WebDavPath::resolveUrl($spaceKey);
     }
 }
