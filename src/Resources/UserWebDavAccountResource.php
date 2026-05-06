@@ -28,6 +28,7 @@ use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
 use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 use N3XT0R\LaravelWebdavServerFilament\Resources\UserWebDavAccountResource\Pages;
+use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
 use Throwable;
 
 final class UserWebDavAccountResource extends Resource
@@ -100,12 +101,13 @@ final class UserWebDavAccountResource extends Resource
                 ->password()
                 ->revealable()
                 ->required(fn (string $operation): bool => $operation === 'create')
+                ->rules([WebDavPasswordRule::validationRule()])
                 ->suffixAction(
                     Action::make('generatePassword')
                         ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.generate_password'))
                         ->icon(Heroicon::OutlinedKey)
                         ->action(function (Set $set): void {
-                            $password = Str::password(16);
+                            $password = Str::password(WebDavPasswordRule::generatedLength());
 
                             $set('password', $password);
                             $set('password_confirmation', $password);

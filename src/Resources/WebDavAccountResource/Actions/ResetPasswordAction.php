@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\DTO\Management\AccountUpdateDto;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
+use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
 
 final class ResetPasswordAction extends Action
 {
@@ -38,7 +39,8 @@ final class ResetPasswordAction extends Action
                     ->password()
                     ->revealable()
                     ->required()
-                    ->default(fn (): string => Str::password(16)),
+                    ->rules([WebDavPasswordRule::validationRule()])
+                    ->default(fn (): string => Str::password(WebDavPasswordRule::generatedLength())),
 
                 TextInput::make('password_confirmation')
                     ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.new_password_confirmation'))
