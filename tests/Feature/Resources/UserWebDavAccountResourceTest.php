@@ -57,8 +57,8 @@ final class UserWebDavAccountResourceTest extends DatabaseTestCase
         Livewire::test(CreateUserWebDavAccount::class)
             ->fillForm([
                 'username' => 'self-service-account',
-                'password' => 'Secret1234!',
-                'password_confirmation' => 'Secret1234!',
+                'password' => 'ValidP@ssword123',
+                'password_confirmation' => 'ValidP@ssword123',
                 'enabled' => true,
             ])
             ->call('create')

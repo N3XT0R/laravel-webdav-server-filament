@@ -91,8 +91,8 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         Livewire::test(CreateWebDavAccount::class)
             ->fillForm([
                 'username' => 'new-account',
-                'password' => 'Secret1234!',
-                'password_confirmation' => 'Different1234!',
+                'password' => 'ValidP@ssword123',
+                'password_confirmation' => 'OtherP@ssword456',
                 'user_id' => $user->id,
                 'enabled' => true,
             ])
@@ -200,15 +200,15 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
         Livewire::test(ListWebDavAccounts::class)
             ->callTableAction('resetPassword', $account, data: [
-                'password' => 'NewSecret1234!',
-                'password_confirmation' => 'NewSecret1234!',
+                'password' => 'N3wP@ssword!5678',
+                'password_confirmation' => 'N3wP@ssword!5678',
             ])
             ->assertHasNoTableActionErrors();
 
         $newHash = $account->fresh()->password_encrypted;
 
         self::assertNotSame($oldHash, $newHash);
-        self::assertTrue(Hash::check('NewSecret1234!', $newHash));
+        self::assertTrue(Hash::check('N3wP@ssword!5678', $newHash));
 
         Notification::assertSentTo(
             $user,
@@ -218,11 +218,11 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
                 self::assertSame('Your WebDAV password was reset', $mail->subject);
                 self::assertContains('The password for your WebDAV account "reset-me" was reset.', $mail->introLines);
-                self::assertContains('New password: NewSecret1234!', $mail->introLines);
+                self::assertContains('New password: N3wP@ssword!5678', $mail->introLines);
 
                 return $channels === ['mail']
                     && $notification->getUsername() === 'reset-me'
-                    && $notification->getPassword() === 'NewSecret1234!';
+                    && $notification->getPassword() === 'N3wP@ssword!5678';
             },
         );
     }
@@ -259,8 +259,8 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             ->fillForm([
                 'username' => 'brand-new-account',
                 'display_name' => 'Brand New',
-                'password' => 'Secret1234!',
-                'password_confirmation' => 'Secret1234!',
+                'password' => 'ValidP@ssword123',
+                'password_confirmation' => 'ValidP@ssword123',
                 'user_id' => $targetUser->id,
                 'enabled' => true,
                 'meta' => ['quota' => '1GB'],
@@ -274,7 +274,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         self::assertSame($targetUser->id, $account->user_id);
         self::assertTrue($account->enabled);
         self::assertSame(['quota' => '1GB'], $account->meta);
-        self::assertTrue(Hash::check('Secret1234!', $account->password_encrypted));
+        self::assertTrue(Hash::check('ValidP@ssword123', $account->password_encrypted));
         $this->assertWebDavAccountEventDispatched(
             WebDavAccountCreatedEvent::class,
             WebDavAccountCreatedEvent::ACTION,
@@ -291,11 +291,11 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
                 self::assertContains('WebDAV account: brand-new-account', $mail->introLines);
                 self::assertContains("Linked user: {$targetUser->name} <{$targetUser->email}>", $mail->introLines);
                 self::assertContains('Created at: ' . $account->created_at->toDateTimeString(), $mail->introLines);
-                self::assertContains('Password: Secret1234!', $mail->introLines);
+                self::assertContains('Password: ValidP@ssword123', $mail->introLines);
 
                 return $channels === ['mail']
                     && $notification->getUsername() === 'brand-new-account'
-                    && $notification->getPassword() === 'Secret1234!'
+                    && $notification->getPassword() === 'ValidP@ssword123'
                     && $notification->getCreatedAt()->equalTo($account->created_at);
             },
         );
@@ -314,8 +314,8 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             ->fillForm([
                 'username' => 'silent-account',
                 'display_name' => 'Silent Account',
-                'password' => 'Secret1234!',
-                'password_confirmation' => 'Secret1234!',
+                'password' => 'ValidP@ssword123',
+                'password_confirmation' => 'ValidP@ssword123',
                 'user_id' => $targetUser->id,
                 'enabled' => true,
                 'meta' => null,
@@ -336,8 +336,8 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         Livewire::test(CreateWebDavAccount::class)
             ->fillForm([
                 'username' => 'existing-account',
-                'password' => 'Secret1234!',
-                'password_confirmation' => 'Secret1234!',
+                'password' => 'ValidP@ssword123',
+                'password_confirmation' => 'ValidP@ssword123',
                 'user_id' => $user->id,
                 'enabled' => true,
             ])
@@ -424,8 +424,8 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
             ->fillForm([
                 'username' => 'change-password',
                 'display_name' => null,
-                'password' => 'BrandNew5678!',
-                'password_confirmation' => 'BrandNew5678!',
+                'password' => 'Br@ndNewP@ss567!',
+                'password_confirmation' => 'Br@ndNewP@ss567!',
                 'user_id' => $user->id,
                 'enabled' => true,
                 'meta' => null,
@@ -436,7 +436,7 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
         $fresh = $account->fresh();
 
         self::assertNotSame($oldHash, $fresh->password_encrypted);
-        self::assertTrue(Hash::check('BrandNew5678!', $fresh->password_encrypted));
+        self::assertTrue(Hash::check('Br@ndNewP@ss567!', $fresh->password_encrypted));
     }
 
     #[Test]
@@ -494,15 +494,15 @@ final class WebDavAccountResourceTest extends DatabaseTestCase
 
         Livewire::test(EditWebDavAccount::class, ['record' => $account->getKey()])
             ->callAction('resetPassword', data: [
-                'password' => 'HeaderNew5678!',
-                'password_confirmation' => 'HeaderNew5678!',
+                'password' => 'H3aderNewP@ss56!',
+                'password_confirmation' => 'H3aderNewP@ss56!',
             ])
             ->assertHasNoActionErrors();
 
         $fresh = $account->fresh();
 
         self::assertNotSame($oldHash, $fresh->password_encrypted);
-        self::assertTrue(Hash::check('HeaderNew5678!', $fresh->password_encrypted));
+        self::assertTrue(Hash::check('H3aderNewP@ss56!', $fresh->password_encrypted));
     }
 
     #[Test]
