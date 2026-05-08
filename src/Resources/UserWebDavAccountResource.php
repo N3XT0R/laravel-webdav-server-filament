@@ -28,7 +28,7 @@ use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
 use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 use N3XT0R\LaravelWebdavServerFilament\Resources\UserWebDavAccountResource\Pages;
-use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
+use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
 use Throwable;
 
 final class UserWebDavAccountResource extends Resource

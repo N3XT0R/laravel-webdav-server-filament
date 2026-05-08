@@ -6,7 +6,7 @@ namespace N3XT0R\LaravelWebdavServerFilament\Tests\Unit\Rules;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
+use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
 use N3XT0R\LaravelWebdavServerFilament\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 

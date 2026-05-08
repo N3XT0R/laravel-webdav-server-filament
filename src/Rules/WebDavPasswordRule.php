@@ -4,36 +4,41 @@ declare(strict_types=1);
 
 namespace N3XT0R\LaravelWebdavServerFilament\Rules;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Validation\Rules\Password;
 
 final class WebDavPasswordRule
 {
-    public static function validationRule(): Password
+    public function __construct(private readonly ConfigRepository $config)
     {
-        $rule = Password::min(self::minLength());
+    }
 
-        if ((bool) config('laravel-webdav-server-filament.password.require_mixed_case', true)) {
+    public function validationRule(): Password
+    {
+        $rule = Password::min($this->minLength());
+
+        if ((bool) $this->config->get('laravel-webdav-server-filament.password.require_mixed_case', true)) {
             $rule = $rule->mixedCase();
         }
 
-        if ((bool) config('laravel-webdav-server-filament.password.require_numbers', true)) {
+        if ((bool) $this->config->get('laravel-webdav-server-filament.password.require_numbers', true)) {
             $rule = $rule->numbers();
         }
 
-        if ((bool) config('laravel-webdav-server-filament.password.require_symbols', true)) {
+        if ((bool) $this->config->get('laravel-webdav-server-filament.password.require_symbols', true)) {
             $rule = $rule->symbols();
         }
 
         return $rule;
     }
 
-    public static function generatedLength(): int
+    public function generatedLength(): int
     {
-        return self::minLength();
+        return $this->minLength();
     }
 
-    private static function minLength(): int
+    private function minLength(): int
     {
-        return (int) config('laravel-webdav-server-filament.password.min_length', 16);
+        return (int) $this->config->get('laravel-webdav-server-filament.password.min_length', 16);
     }
 }

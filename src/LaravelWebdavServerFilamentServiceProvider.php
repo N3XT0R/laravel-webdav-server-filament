@@ -61,6 +61,7 @@ class LaravelWebdavServerFilamentServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->app->singleton(\N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule::class);
     }
 
     public function packageBooted(): void

@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\DTO\Management\AccountUpdateDto;
 use N3XT0R\LaravelWebdavServer\Services\AccountManagementService;
 use N3XT0R\LaravelWebdavServerFilament\Notifications\WebDavAccountPasswordResetNotification;
-use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
+use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
 
 final class ResetPasswordAction extends Action
 {

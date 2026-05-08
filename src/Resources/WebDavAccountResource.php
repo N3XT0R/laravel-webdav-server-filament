@@ -32,7 +32,7 @@ use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Actions\ResetPasswordAction;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages;
-use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
+use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
 use Throwable;
 
 final class WebDavAccountResource extends Resource

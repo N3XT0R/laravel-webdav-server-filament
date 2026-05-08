@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Password policy for WebDAV accounts**
+    - Added configurable password policy via `laravel-webdav-server-filament.password` configuration keys: `min_length`, `require_mixed_case`, `require_numbers`, and `require_symbols`.
+    - Password fields in all account forms and the reset-password action now enforce the configured policy.
+    - The password generator respects the configured `min_length` when auto-generating passwords.
+    - Added `WebDavPasswordRule` facade (`N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule`) for accessing `validationRule()` and `generatedLength()` via Laravel's service container.
+
 ## [1.0.1] - 2026-05-05
 
 ### Fixed
