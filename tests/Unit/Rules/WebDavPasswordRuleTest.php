@@ -4,14 +4,46 @@ declare(strict_types=1);
 
 namespace N3XT0R\LaravelWebdavServerFilament\Tests\Unit\Rules;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
+use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule as WebDavPasswordRuleService;
 use N3XT0R\LaravelWebdavServerFilament\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
 final class WebDavPasswordRuleTest extends TestCase
 {
+    #[Test]
+    public function service_is_registered_as_singleton_in_container(): void
+    {
+        $a = $this->app->make(WebDavPasswordRuleService::class);
+        $b = $this->app->make(WebDavPasswordRuleService::class);
+
+        self::assertSame($a, $b);
+    }
+
+    #[Test]
+    public function service_reads_config_from_injected_repository(): void
+    {
+        Config::set('laravel-webdav-server-filament.password.min_length', 16);
+
+        $isolatedConfig = $this->app->make(ConfigRepository::class);
+        $isolatedConfig->set('laravel-webdav-server-filament.password.min_length', 42);
+
+        $service = new WebDavPasswordRuleService($isolatedConfig);
+
+        self::assertSame(42, $service->generatedLength());
+    }
+
+    #[Test]
+    public function facade_delegates_to_service_class(): void
+    {
+        $root = WebDavPasswordRule::getFacadeRoot();
+
+        self::assertInstanceOf(WebDavPasswordRuleService::class, $root);
+    }
+
     #[Test]
     public function generated_length_returns_configured_value(): void
     {
