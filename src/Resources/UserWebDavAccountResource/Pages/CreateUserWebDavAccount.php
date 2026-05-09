@@ -20,6 +20,11 @@ final class CreateUserWebDavAccount extends CreateRecord
 {
     protected static string $resource = UserWebDavAccountResource::class;
 
+    public function getSubheading(): string|\Illuminate\Contracts\Support\Htmlable|null
+    {
+        return __('webdav-server-filament::webdav-server-filament.resources.accounts.pages.create.description');
+    }
+
     /**
      * Abort with 403 when the user resource is not enabled for the authenticated user on this panel.
      */

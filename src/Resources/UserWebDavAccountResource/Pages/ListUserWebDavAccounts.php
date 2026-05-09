@@ -30,6 +30,11 @@ final class ListUserWebDavAccounts extends ListRecords
         parent::mount();
     }
 
+    public function getSubheading(): string|\Illuminate\Contracts\Support\Htmlable|null
+    {
+        return __('webdav-server-filament::webdav-server-filament.resources.accounts.pages.list.description');
+    }
+
     /**
      * Return page header actions for the account list.
      *

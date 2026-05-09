@@ -46,6 +46,14 @@ return [
                 'password_reset' => 'Password reset successfully',
                 'webdav_url_copied' => 'WebDAV URL copied',
             ],
+            'pages' => [
+                'list' => [
+                    'description' => 'Manage your personal WebDAV accounts here. Each account gives you access to your files via any WebDAV-compatible client.',
+                ],
+                'create' => [
+                    'description' => 'Create a new WebDAV account to access your files from a WebDAV-compatible client such as a desktop file manager or mobile app.',
+                ],
+            ],
         ],
     ],
     'notifications' => [

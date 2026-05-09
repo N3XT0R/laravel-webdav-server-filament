@@ -46,6 +46,14 @@ return [
                 'password_reset' => 'Passwort erfolgreich zurückgesetzt',
                 'webdav_url_copied' => 'WebDAV-URL kopiert',
             ],
+            'pages' => [
+                'list' => [
+                    'description' => 'Hier verwaltest du deine persönlichen WebDAV-Konten. Mit jedem Konto kannst du über einen WebDAV-kompatiblen Client auf deine Dateien zugreifen.',
+                ],
+                'create' => [
+                    'description' => 'Lege hier ein neues WebDAV-Konto an, um mit einem WebDAV-kompatiblen Client – z. B. einem Dateimanager oder einer mobilen App – auf deine Dateien zuzugreifen.',
+                ],
+            ],
         ],
     ],
     'notifications' => [

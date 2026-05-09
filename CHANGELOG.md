@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Page descriptions on user account resource pages**
+    - Added a descriptive subheading to the account list page explaining the purpose of WebDAV accounts to end users.
+    - Added a descriptive subheading to the account create page guiding users through the account creation process.
+    - Both descriptions are translatable via `resources.accounts.pages.list.description` and `resources.accounts.pages.create.description` in the package language files.
+
 - **Configurable meta field visibility on user account forms**
     - Added `laravel-webdav-server-filament.user_resource.show_meta` to control whether the meta key/value field is shown on user account forms (default: `true`).
 
