@@ -85,17 +85,45 @@ $panel->plugin(
 
 The package configuration is published as `config/laravel-webdav-server-filament.php`.
 
-The notification system is enabled by default:
-
 ```php
 return [
+    'user_resource' => [
+        'show_meta' => false,
+    ],
+
     'notifications' => [
         'enabled' => true,
+    ],
+
+    'password' => [
+        'min_length'         => 16,
+        'require_mixed_case' => true,
+        'require_numbers'    => true,
+        'require_symbols'    => true,
     ],
 ];
 ```
 
+### Notifications
+
 Set `notifications.enabled` to `false` when account creation and password reset notifications should not be sent.
+
+### Password Policy
+
+The `password` section controls the rules applied to every password field in the package:
+
+| Key | Default | Effect |
+|---|---|---|
+| `min_length` | `16` | Minimum character count; also used for auto-generated passwords |
+| `require_mixed_case` | `true` | Requires at least one uppercase and one lowercase letter |
+| `require_numbers` | `true` | Requires at least one digit |
+| `require_symbols` | `true` | Requires at least one symbol |
+
+### User Resource
+
+| Key | Default | Effect |
+|---|---|---|
+| `user_resource.show_meta` | `false` | Shows the meta key/value field on user account forms when `true` |
 
 ## Core Package Configuration
 

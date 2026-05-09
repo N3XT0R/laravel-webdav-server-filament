@@ -50,6 +50,38 @@ the result is cached.
 The user resource enforces its access check independently of `canAccess()`, which means it is compatible with Filament
 Shield and other authorization packages that extend `canAccess()`.
 
+### Password Policy
+
+The password validation rules applied to all password fields are controlled via config:
+
+```php
+'password' => [
+    'min_length'         => 16,
+    'require_mixed_case' => true,
+    'require_numbers'    => true,
+    'require_symbols'    => true,
+],
+```
+
+All four keys are optional. Omitting a key falls back to the default shown above.
+
+The auto-generated password (via the generate button) uses `min_length` as its length.
+
+### User Resource — Display Options
+
+The meta key/value field is hidden on user account forms by default. Enable it when your application uses metadata
+that end users should be able to manage themselves:
+
+```php
+'user_resource' => [
+    'show_meta' => true,
+],
+```
+
+The page descriptions shown on the list and create pages can be translated or overridden by publishing the package
+language files and editing the `resources.accounts.pages.list.description` and
+`resources.accounts.pages.create.description` keys.
+
 ### User Select Field
 
 Customize the user search field in the admin resource:

@@ -34,6 +34,9 @@ When an administrator creates an account, they choose:
 - enabled state
 - optional metadata
 
+Passwords must meet the configured policy (minimum length, mixed case, numbers, symbols). A generate button creates a
+compliant password automatically. See [Configuration — Password Policy](installation.md#password-policy) for defaults.
+
 The linked application user is important because notifications and downstream authorization workflows depend on it.
 After creation, that relationship is locked in the edit form.
 
@@ -91,13 +94,18 @@ panel. See [Extending The Package](extending.md#user-resource-self-service) for 
 
 ### Account Creation
 
+The list and create pages display a description explaining the purpose of WebDAV accounts. Both texts are translatable
+via the package language files.
+
 When a user creates an account, they provide:
 
 - username
 - optional display name
 - password
 - enabled state
-- optional metadata
+- optional metadata (only shown when `user_resource.show_meta` is `true` in config)
+
+Passwords must meet the configured policy. A generate button creates a compliant password automatically.
 
 The account is automatically linked to the authenticated user. There is no user select field.
 
