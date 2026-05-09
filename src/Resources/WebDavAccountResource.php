@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace N3XT0R\LaravelWebdavServerFilament\Resources;
 
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -17,7 +16,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -26,17 +24,18 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use N3XT0R\LaravelWebdavServer\Models\WebDavAccountModel;
+use N3XT0R\LaravelWebdavServerFilament\Concerns\ProvidesPasswordFormFields;
 use N3XT0R\LaravelWebdavServerFilament\Events\WebDavAccountDeletedEvent;
 use N3XT0R\LaravelWebdavServerFilament\LaravelWebdavServerFilamentPlugin;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Actions\ResetPasswordAction;
 use N3XT0R\LaravelWebdavServerFilament\Resources\WebDavAccountResource\Pages;
-use N3XT0R\LaravelWebdavServerFilament\Facades\WebDavPasswordRule;
 use Throwable;
 
 final class WebDavAccountResource extends Resource
 {
+    use ProvidesPasswordFormFields;
+
     protected static ?string $model = WebDavAccountModel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedKey;
@@ -61,30 +60,9 @@ final class WebDavAccountResource extends Resource
                 ->maxLength(255)
                 ->placeholder(__('webdav-server-filament::webdav-server-filament.resources.accounts.placeholders.display_name')),
 
-            TextInput::make('password')
-                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password'))
-                ->password()
-                ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
-                ->rules([WebDavPasswordRule::validationRule()])
-                ->suffixAction(
-                    Action::make('generatePassword')
-                        ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.actions.generate_password'))
-                        ->icon(Heroicon::OutlinedKey)
-                        ->action(function (Set $set): void {
-                            $password = Str::password(WebDavPasswordRule::generatedLength());
+            static::buildPasswordField(),
 
-                            $set('password', $password);
-                            $set('password_confirmation', $password);
-                        }),
-                ),
-
-            TextInput::make('password_confirmation')
-                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password_confirmation'))
-                ->password()
-                ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
-                ->same('password'),
+            static::buildPasswordConfirmationField(),
 
             static::buildUserSelect(),
 
