@@ -228,6 +228,6 @@ final class UserWebDavAccountResource extends Resource
     private static function deleteAction(): DeleteAction
     {
         return DeleteAction::make()
-            ->after(fn(Model $record): mixed => (new WebDavAccountDeletedEvent($record))->dispatchForListeners());
+            ->after(fn(Model $record): mixed => new WebDavAccountDeletedEvent($record)->dispatchForListeners());
     }
 }
