@@ -10,6 +10,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -61,7 +62,7 @@ class LaravelWebdavServerFilamentServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(\N3XT0R\LaravelWebdavServerFilament\Rules\WebDavPasswordRule::class);
+        $this->app->singleton(WebDavPasswordRule::class);
     }
 
     public function packageBooted(): void
@@ -82,7 +83,7 @@ class LaravelWebdavServerFilamentServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
+            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
                 $this->publishes([
                     $file->getRealPath() => base_path("stubs/laravel-webdav-server-filament/{$file->getFilename()}"),
                 ], 'laravel-webdav-server-filament-stubs');
