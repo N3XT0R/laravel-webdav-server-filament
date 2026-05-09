@@ -11,6 +11,8 @@ Official Filament plugin for [`n3xt0r/laravel-webdav-server`](https://github.com
 Adds WebDAV account management to any Filament panel — for administrators managing accounts on behalf of users, and
 optionally for users managing their own accounts directly.
 
+![Laravel WebDAV Server Logo](art/logo.jpg)
+
 ---
 
 ## Requirements
