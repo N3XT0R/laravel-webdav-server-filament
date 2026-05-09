@@ -19,6 +19,7 @@ class LaravelWebdavServerFilamentPlugin implements Plugin
 
     private ?Closure $userSelectCallback = null;
 
+
     /**
      * Return the unique Filament plugin identifier used for panel registration.
      *
