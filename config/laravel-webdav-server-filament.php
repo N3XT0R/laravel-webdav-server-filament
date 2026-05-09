@@ -2,6 +2,10 @@
 
 // config for N3XT0R/LaravelWebdavServerFilament
 return [
+    'user_resource' => [
+        'show_meta' => true, // show the meta key/value field on user account forms
+    ],
+
     'notifications' => [
         'enabled' => true,
     ],

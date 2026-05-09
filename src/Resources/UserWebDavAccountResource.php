@@ -125,11 +125,13 @@ final class UserWebDavAccountResource extends Resource
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.enabled'))
                 ->default(true),
 
-            KeyValue::make('meta')
-                ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta'))
-                ->keyLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_key'))
-                ->valueLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_value'))
-                ->reorderable(),
+            ...((bool) config('laravel-webdav-server-filament.user_resource.show_meta', true) ? [
+                KeyValue::make('meta')
+                    ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta'))
+                    ->keyLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_key'))
+                    ->valueLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_value'))
+                    ->reorderable(),
+            ] : []),
         ]);
     }
 

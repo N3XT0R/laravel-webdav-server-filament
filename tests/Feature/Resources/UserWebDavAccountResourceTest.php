@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace N3XT0R\LaravelWebdavServerFilament\Tests\Feature\Resources;
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
@@ -128,6 +129,17 @@ final class UserWebDavAccountResourceTest extends DatabaseTestCase
         Livewire::test(ViewUserWebDavAccount::class, ['record' => $account->getKey()])
             ->assertFormFieldExists('username')
             ->assertFormFieldExists('enabled');
+    }
+
+    #[Test]
+    public function it_hides_meta_field_when_show_meta_is_disabled_in_config(): void
+    {
+        Config::set('laravel-webdav-server-filament.user_resource.show_meta', false);
+
+        $this->actingAs(User::factory()->create());
+
+        Livewire::test(CreateUserWebDavAccount::class)
+            ->assertFormFieldDoesNotExist('meta');
     }
 
     #[Test]

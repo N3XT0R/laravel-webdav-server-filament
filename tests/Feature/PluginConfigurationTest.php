@@ -123,4 +123,12 @@ final class PluginConfigurationTest extends TestCase
 
         self::assertTrue($config['notifications']['enabled']);
     }
+
+    #[Test]
+    public function it_shows_meta_field_on_user_resource_by_default(): void
+    {
+        $config = require __DIR__ . '/../../config/laravel-webdav-server-filament.php';
+
+        self::assertTrue($config['user_resource']['show_meta']);
+    }
 }

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Configurable meta field visibility on user account forms**
+    - Added `laravel-webdav-server-filament.user_resource.show_meta` to control whether the meta key/value field is shown on user account forms (default: `true`).
+
 - **Password policy for WebDAV accounts**
     - Added `laravel-webdav-server-filament.password.min_length` to configure the minimum password length (default: `16`).
     - Added `laravel-webdav-server-filament.password.require_mixed_case` to require upper- and lowercase characters (default: `true`).
