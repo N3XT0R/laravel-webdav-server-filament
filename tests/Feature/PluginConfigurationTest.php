@@ -119,16 +119,12 @@ final class PluginConfigurationTest extends TestCase
     #[Test]
     public function it_enables_notifications_by_default(): void
     {
-        $config = require __DIR__.'/../../config/laravel-webdav-server-filament.php';
-
-        self::assertTrue($config['notifications']['enabled']);
+        self::assertTrue(config('laravel-webdav-server-filament.notifications.enabled'));
     }
 
     #[Test]
     public function it_hides_meta_field_on_user_resource_by_default(): void
     {
-        $config = require __DIR__.'/../../config/laravel-webdav-server-filament.php';
-
-        self::assertFalse($config['user_resource']['show_meta']);
+        self::assertFalse(config('laravel-webdav-server-filament.user_resource.show_meta'));
     }
 }
