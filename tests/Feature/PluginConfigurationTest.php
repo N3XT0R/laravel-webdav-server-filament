@@ -56,7 +56,7 @@ final class PluginConfigurationTest extends TestCase
     #[Test]
     public function it_stores_and_retrieves_the_user_account_resource_callback(): void
     {
-        $fn = fn (object $user): bool => true;
+        $fn = fn(object $user): bool => true;
 
         $callback = LaravelWebdavServerFilamentPlugin::make()
             ->userAccountResourceEnabledUsing($fn)
@@ -93,7 +93,7 @@ final class PluginConfigurationTest extends TestCase
         $panel = Panel::make()->id('test');
 
         LaravelWebdavServerFilamentPlugin::make()
-            ->userAccountResourceEnabledUsing(fn (object $user): bool => true)
+            ->userAccountResourceEnabledUsing(fn(object $user): bool => true)
             ->register($panel);
 
         self::assertContains(UserWebDavAccountResource::class, $panel->getResources());
@@ -102,7 +102,7 @@ final class PluginConfigurationTest extends TestCase
     #[Test]
     public function it_stores_and_retrieves_the_user_select_callback(): void
     {
-        $callback = fn (Select $select): Select => $select->label('Custom User');
+        $callback = fn(Select $select): Select => $select->label('Custom User');
 
         $plugin = LaravelWebdavServerFilamentPlugin::make()
             ->userSelectUsing($callback);
@@ -119,16 +119,16 @@ final class PluginConfigurationTest extends TestCase
     #[Test]
     public function it_enables_notifications_by_default(): void
     {
-        $config = require __DIR__ . '/../../config/laravel-webdav-server-filament.php';
+        $config = require __DIR__.'/../../config/laravel-webdav-server-filament.php';
 
         self::assertTrue($config['notifications']['enabled']);
     }
 
     #[Test]
-    public function it_shows_meta_field_on_user_resource_by_default(): void
+    public function it_hides_meta_field_on_user_resource_by_default(): void
     {
-        $config = require __DIR__ . '/../../config/laravel-webdav-server-filament.php';
+        $config = require __DIR__.'/../../config/laravel-webdav-server-filament.php';
 
-        self::assertTrue($config['user_resource']['show_meta']);
+        self::assertFalse($config['user_resource']['show_meta']);
     }
 }

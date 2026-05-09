@@ -45,7 +45,7 @@ final class UserWebDavAccountResourceTest extends DatabaseTestCase
             ->assertFormFieldExists('password')
             ->assertFormFieldExists('password_confirmation')
             ->assertFormFieldExists('enabled')
-            ->assertFormFieldExists('meta')
+            ->assertSchemaComponentHidden('meta')
             ->assertFormFieldDoesNotExist('user_id');
     }
 
@@ -164,7 +164,7 @@ final class UserWebDavAccountResourceTest extends DatabaseTestCase
     private function createAccount(User $user, array $attributes = []): WebDavAccountModel
     {
         return WebDavAccountModel::create([
-            'username' => $attributes['username'] ?? 'account-' . Str::uuid()->toString(),
+            'username' => $attributes['username'] ?? 'account-'.Str::uuid()->toString(),
             'password_encrypted' => $attributes['password_encrypted'] ?? Hash::make('secret'),
             'enabled' => $attributes['enabled'] ?? true,
             'user_id' => $attributes['user_id'] ?? $user->id,
