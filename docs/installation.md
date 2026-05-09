@@ -25,7 +25,7 @@ composer require n3xt0r/laravel-webdav-server-filament
 Publish the configuration when you need to change defaults:
 
 ```bash
-php artisan vendor:publish --tag="laravel-webdav-server-filament-config"
+php artisan vendor:publish --tag="webdav-server-filament-config"
 ```
 
 ## Plugin Registration
@@ -112,17 +112,17 @@ Set `notifications.enabled` to `false` when account creation and password reset 
 
 The `password` section controls the rules applied to every password field in the package:
 
-| Key | Default | Effect |
-|---|---|---|
-| `min_length` | `16` | Minimum character count; also used for auto-generated passwords |
-| `require_mixed_case` | `true` | Requires at least one uppercase and one lowercase letter |
-| `require_numbers` | `true` | Requires at least one digit |
-| `require_symbols` | `true` | Requires at least one symbol |
+| Key                  | Default | Effect                                                          |
+|----------------------|---------|-----------------------------------------------------------------|
+| `min_length`         | `16`    | Minimum character count; also used for auto-generated passwords |
+| `require_mixed_case` | `true`  | Requires at least one uppercase and one lowercase letter        |
+| `require_numbers`    | `true`  | Requires at least one digit                                     |
+| `require_symbols`    | `true`  | Requires at least one symbol                                    |
 
 ### User Resource
 
-| Key | Default | Effect |
-|---|---|---|
+| Key                       | Default | Effect                                                           |
+|---------------------------|---------|------------------------------------------------------------------|
 | `user_resource.show_meta` | `false` | Shows the meta key/value field on user account forms when `true` |
 
 ## Core Package Configuration
