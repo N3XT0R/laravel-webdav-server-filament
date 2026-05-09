@@ -12,14 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Page descriptions on user account resource pages**
     - Added a descriptive subheading to the account list page explaining the purpose of WebDAV accounts to end users.
     - Added a descriptive subheading to the account create page guiding users through the account creation process.
-    - Both descriptions are translatable via `resources.accounts.pages.list.description` and `resources.accounts.pages.create.description` in the package language files.
+    - Both descriptions are translatable via `resources.accounts.pages.list.description` and
+      `resources.accounts.pages.create.description` in the package language files.
 
 - **Configurable meta field visibility on user account forms**
-    - Added `laravel-webdav-server-filament.user_resource.show_meta` to control whether the meta key/value field is shown on user account forms (default: `true`).
+    - Added `laravel-webdav-server-filament.user_resource.show_meta` to control whether the meta key/value field is
+      shown on user account forms (default: `false`).
 
 - **Password policy for WebDAV accounts**
-    - Added `laravel-webdav-server-filament.password.min_length` to configure the minimum password length (default: `16`).
-    - Added `laravel-webdav-server-filament.password.require_mixed_case` to require upper- and lowercase characters (default: `true`).
+    - Added `laravel-webdav-server-filament.password.min_length` to configure the minimum password length (default:
+      `16`).
+    - Added `laravel-webdav-server-filament.password.require_mixed_case` to require upper- and lowercase characters (
+      default: `true`).
     - Added `laravel-webdav-server-filament.password.require_numbers` to require at least one digit (default: `true`).
     - Added `laravel-webdav-server-filament.password.require_symbols` to require at least one symbol (default: `true`).
     - Password fields in all account forms and the password reset action enforce the configured policy.
