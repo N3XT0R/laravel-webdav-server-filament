@@ -45,7 +45,7 @@ final class UserWebDavAccountResourceTest extends DatabaseTestCase
             ->assertFormFieldExists('password')
             ->assertFormFieldExists('password_confirmation')
             ->assertFormFieldExists('enabled')
-            ->assertSchemaComponentHidden('meta')
+            ->assertSchemaComponentDoesNotExist('meta')
             ->assertFormFieldDoesNotExist('user_id');
     }
 
