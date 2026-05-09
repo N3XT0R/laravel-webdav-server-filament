@@ -100,7 +100,7 @@ final class UserWebDavAccountResource extends Resource
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password'))
                 ->password()
                 ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
+                ->required(fn(string $operation): bool => $operation === 'create')
                 ->rules([WebDavPasswordRule::validationRule()])
                 ->suffixAction(
                     Action::make('generatePassword')
@@ -118,14 +118,14 @@ final class UserWebDavAccountResource extends Resource
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.password_confirmation'))
                 ->password()
                 ->revealable()
-                ->required(fn (string $operation): bool => $operation === 'create')
+                ->required(fn(string $operation): bool => $operation === 'create')
                 ->same('password'),
 
             Toggle::make('enabled')
                 ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.enabled'))
                 ->default(true),
 
-            ...((bool) config('laravel-webdav-server-filament.user_resource.show_meta', true) ? [
+            ...((bool)config('laravel-webdav-server-filament.user_resource.show_meta', false) ? [
                 KeyValue::make('meta')
                     ->label(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta'))
                     ->keyLabel(__('webdav-server-filament::webdav-server-filament.resources.accounts.fields.meta_key'))
@@ -228,6 +228,6 @@ final class UserWebDavAccountResource extends Resource
     private static function deleteAction(): DeleteAction
     {
         return DeleteAction::make()
-            ->after(fn (Model $record): mixed => (new WebDavAccountDeletedEvent($record))->dispatchForListeners());
+            ->after(fn(Model $record): mixed => (new WebDavAccountDeletedEvent($record))->dispatchForListeners());
     }
 }
