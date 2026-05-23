@@ -11,7 +11,11 @@ Official Filament plugin for [`n3xt0r/laravel-webdav-server`](https://github.com
 Adds WebDAV account management to any Filament panel — for administrators managing accounts on behalf of users, and
 optionally for users managing their own accounts directly.
 
-![Laravel WebDAV Server Logo](art/logo.jpg)
+<img
+src="art/logo.jpg"
+alt="Laravel WebDAV Server Logo"
+class="filament-hidden"
+/>
 
 ---
 
@@ -43,7 +47,8 @@ The package ships two Filament resources:
 - **Admin resource** — full control over all WebDAV accounts; enabled by default
 - **User resource** — self-service access for authenticated users; disabled by default, opt-in via plugin configuration
 
-See [Account Management](docs/account-management.md) for a full description of both resources, their pages, and the account lifecycle.
+See [Account Management](docs/account-management.md) for a full description of both resources, their pages, and the
+account lifecycle.
 
 ---
 
@@ -61,12 +66,12 @@ See [Installation — Configuration](docs/installation.md#configuration) for all
 
 ## Plugin API
 
-| Method | Description |
-|---|---|
-| `withoutAdminAccountResource()` | Disable the admin-facing resource on this panel |
-| `withUserAccountResource()` | Enable the user-facing self-service resource for all authenticated users |
-| `userAccountResourceEnabledUsing(callable $fn)` | Enable the user-facing resource conditionally via callback |
-| `userSelectUsing(callable $fn)` | Customize the user select field in the admin resource |
+| Method                                          | Description                                                              |
+|-------------------------------------------------|--------------------------------------------------------------------------|
+| `withoutAdminAccountResource()`                 | Disable the admin-facing resource on this panel                          |
+| `withUserAccountResource()`                     | Enable the user-facing self-service resource for all authenticated users |
+| `userAccountResourceEnabledUsing(callable $fn)` | Enable the user-facing resource conditionally via callback               |
+| `userSelectUsing(callable $fn)`                 | Customize the user select field in the admin resource                    |
 
 See [Extending The Package](docs/extending.md) for usage examples and customization options.
 
